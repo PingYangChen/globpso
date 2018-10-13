@@ -1,5 +1,7 @@
 #' Particle Swarm Optimization Algorithms for Minimization Problems
 #'
+#' Particle Swarm Optimization Algorithms for Minimization Problems
+#'
 #' @param objFunc The R or Rcpp compiled objective function. See the example.
 #' @param lower The vector of finite lower bounds of the search domain.
 #' Its length should be equal to the dimension of domain. space.
@@ -19,27 +21,22 @@
 #' TBD
 #' @examples
 #' library(globpso)
-#' 
 #' # Optimize the 3-dimensional quadratic objective function with location shift
 #' objf <- function(x, loc) {
 #'   val <- 0
 #'   for (i in 1:length(x)) val <- val + (x[i] - loc)^2
 #'   return(val)
 #' }
-#' 
 #' # The search domain is [-5, 5]^3
 #' upp_bound <- rep(5, 3)
 #' low_bound <- rep(-5, 3)
-#' 
 #' # Define the location shift to be 1
 #' loc_shift <- 1
-#' 
 #' # Run PSO for this optimization problem
 #' # Also input the enviorment variable, the location shift 'loc_shift'
 #' res <- globpso(objFunc = objf, lower = low_bound, upper = upp_bound, loc = loc_shift)
 #' res$par
 #' res$val
-#' 
 #' # One can also write C++ objective function to further accelerate the computation
 #' library(Rcpp)
 #' library(RcppArmadillo)
@@ -55,12 +52,10 @@
 #' res_c <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = loc_shift)
 #' res_c$par
 #' res_c$val
-#' 
 #' # Use getPSOInfo() to change the PSO options
 #' alg_setting <- getPSOInfo(nSwarm = 64, maxIter = 200, psoType = "quantum")
 #' res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, PSO_INFO = alg_setting, loc = loc_shift)
 #' res_c_large$history
-#' 
 # @references Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198. 
 # @references Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2):191-204.
 #' @references Shi, Y., & Eberhart, R. (1998, May). A modified particle swarm optimizer. In Evolutionary Computation Proceedings, 1998. IEEE World Congress on Computational Intelligence., The 1998 IEEE International Conference on (pp. 69-73). IEEE.
@@ -102,9 +97,9 @@ globpso <- function(objFunc, lower, upper,
 
 
 #' Generation function of PSO parameter settings
-#'
+#' 
 #' Create a list with PSO parameters for optimal discrimination design search.
-#'
+#' 
 #' @param nSwarm A integer number of swarm size in PSO algorithm.
 #' @param maxIter A integer number of maximal PSO iterations.
 #' @param checkConv A logical value which controls whether PSO checks the stopping criterion during updating procedure.
@@ -141,8 +136,6 @@ globpso <- function(objFunc, lower, upper,
 #' @examples
 #' # Get default settings with specified swarm size and maximal number of iterations.
 #' PSO_INFO <- getPSOInfo(nSwarm = 32, maxIter = 100)
-#'
-# @references Chen, R.-B., Chang, S.-P., Wang, W., Tung, H.-C., and Wong, W. K. (2015). Minimax optimal designs via particle swarm optimization methods. Statistics and Computing, 25(5):975-988.
 #' @name getPSOInfo
 #' @rdname getPSOInfo
 #' @export
