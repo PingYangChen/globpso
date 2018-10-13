@@ -8,7 +8,7 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   // GET PSO PARAMETERS
 	int nSwarm    = PSO_OPTS.nSwarm; 
 	int dSwarm    = PSO_OPTS.dSwarm; 
-	int maxIter   = PSO_OPTS[LOOPID].maxIter; 
+	int maxIter   = PSO_OPTS.maxIter; 
 	//int checkConv = PSO_OPTS.checkConv; 
 	double freeRun   = PSO_OPTS.freeRun; 
 	double tol       = PSO_OPTS.tol; 
@@ -35,7 +35,7 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   // INITIALIZE VELOCITY
   vStep.fill(0);
   // INITIALIZE OBJECTIVE FUNCTION VALUES
-  psoFuncEval(IF_PARALLEL, PSO_OPTS, PSO_DYN, objfunc, swarm, fSwarm); 
+  psoFuncEval(IF_PARALLEL, objfunc, swarm, fSwarm); 
   // INITIALIZE LOCAL BEST
   fPBest = fSwarm;	PBest = swarm;
   // INITIALIZE GLOBAL BEST
@@ -59,11 +59,11 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
       if (t == (maxIter - 1)) Rprintf("\n"); 
     }
     // UPDATE VELOCITY
-		psoUpdateParticle(LOOPID, PSO_OPTS, PSO_DYN, PBest, GBest, velMax, varUpper, varLower, vStep, swarm);
+		psoUpdateParticle(PSO_OPTS, PSO_DYN, PBest, GBest, velMax, varUpper, varLower, vStep, swarm);
     // UPDATE SWARM POSITION
-    psoCheckParticle(LOOPID, PSO_OPTS, PSO_DYN, varUpper, varLower, swarm);	
+    psoCheckParticle(PSO_OPTS, PSO_DYN, varUpper, varLower, swarm);	
     // UPDATE OBJECTIVE FUNCTION VALUES
-    psoFuncEval(IF_PARALLEL, PSO_OPTS, PSO_DYN, objfunc, swarm, fSwarm); 
+    psoFuncEval(IF_PARALLEL, objfunc, swarm, fSwarm); 
     // UPDATE THE LOCAL AND GLOBAL BEST
     if (any(fSwarm < fPBest)) {
       uvec RowChange = find(fSwarm < fPBest);

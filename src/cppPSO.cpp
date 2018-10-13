@@ -3,8 +3,7 @@
 
 // RCPP FUNCTIONS
 //[[Rcpp::export]]
-Rcpp::List cppPSO(SEXP OBJ_FUNC, Rcpp::List PSO_INFO_LIST, 
-                  Rcpp::List EXTERNAL_LIST, const SEXP env, const bool IF_PARALLEL, const bool VERBOSE)
+Rcpp::List cppPSO(SEXP OBJ_FUNC, Rcpp::List PSO_INFO_LIST, const SEXP env, const bool IF_PARALLEL, const bool VERBOSE)
 {
   //arma_rng::set_seed_random();
   /*int NCPU = omp_get_max_threads();
@@ -13,7 +12,7 @@ Rcpp::List cppPSO(SEXP OBJ_FUNC, Rcpp::List PSO_INFO_LIST,
 
   // WRAP FUNCTIONS (INSPIRED BY R PACKAGE 'lbfgs')
   Rcpp::EvalBase *objfunc = NULL;
-  Shield<SEXP> OBJ_FUNC_SEXP(Rcpp::as<SEXP>(OBJ_FUNC);
+  Shield<SEXP> OBJ_FUNC_SEXP(Rcpp::as<SEXP>(OBJ_FUNC));
   if (TYPEOF(OBJ_FUNC_SEXP) == EXTPTRSXP) {
     objfunc = new Rcpp::EvalCompiled(OBJ_FUNC_SEXP, env);
   } else {

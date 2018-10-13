@@ -35,7 +35,7 @@ namespace Rcpp {
           Shield<SEXP> fn(Rcpp::Rcpp_lang3(fcall, x, R_DotsSymbol));
           Shield<SEXP> sexp_fvec(::Rf_eval(fn, env));
           //SEXP sexp_fvec = Rcpp::Rcpp_eval(fn, env); // too slow
-          double f_result = (double)sexp_fvec;
+          double f_result = (double)Rcpp::as<double>(sexp_fvec);
           return f_result;
         }
     };
@@ -149,7 +149,7 @@ void matrixPrintf(const mat &m);
 void rvecPrintf(const rowvec &v);
 void getAlgStruct(PSO_OPTIONS PSO_OPTS, const Rcpp::List PSO_INFO_LIST);
 void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
-              const bool IF_PARALLEL, const bool COUNTER_ON, PSO_Result &PSO_Result)
+              const bool IF_PARALLEL, const bool COUNTER_ON, PSO_Result &PSO_Result);
 void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN, 
 							 				 const arma::mat PBest, const arma::rowvec GBest, 
 							 				 const arma::rowvec velMax, const arma::rowvec varUpper, const arma::rowvec varLower,
@@ -186,35 +186,35 @@ void rvecPrintf(const rowvec &v)
 // PSO OPTIONS
 void getAlgStruct(PSO_OPTIONS PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
 {
-  PSO_OPT.nSwarm     = (int)PSO_INFO_LIST["nSwarm"];
-  PSO_OPT.dSwarm     = (int)PSO_INFO_LIST["dSwarm"];
+  PSO_OPTS.nSwarm     = (int)PSO_INFO_LIST["nSwarm"];
+  PSO_OPTS.dSwarm     = (int)PSO_INFO_LIST["dSwarm"];
 
   Rcpp::NumericVector varUpper_Tmp   = as<NumericVector>(PSO_INFO_LIST["varUpper"]);
   arma::rowvec varUpper(varUpper_Tmp.begin(), varUpper_Tmp.size(), false);
   Rcpp::NumericVector varLower_Tmp   = as<NumericVector>(PSO_INFO_LIST["varLower"]);
   arma::rowvec varLower(varLower_Tmp.begin(), varLower_Tmp.size(), false);
-  PSO_OPT.varUpper   = varUpper;
-  PSO_OPT.varLower   = varLower;
+  PSO_OPTS.varUpper   = varUpper;
+  PSO_OPTS.varLower   = varLower;
 
-  PSO_OPT.maxIter    = (int)PSO_INFO_LIST["maxIter"];
-  //PSO_OPT.checkConv  = (int)PSO_INFO_LIST["checkConv"]);
-  //PSO_OPT.typePSO    = (int)PSO_INFO_LIST["typePSO"]);
-  PSO_OPT.freeRun    = (double)PSO_INFO_LIST["freeRun"];
-  PSO_OPT.tol        = (double)PSO_INFO_LIST["tol"];
-  PSO_OPT.c1         = (double)PSO_INFO_LIST["c1"];
- 	PSO_OPT.c2         = (double)PSO_INFO_LIST["c2"];
-  PSO_OPT.w0         = (double)PSO_INFO_LIST["w0"];
-  PSO_OPT.w1         = (double)PSO_INFO_LIST["w1"];
-  PSO_OPT.w_var      = (double)PSO_INFO_LIST["w_var"];
-  //PSO_OPT.chi        = (double)PSO_INFO_LIST["chi"];
-  PSO_OPT.vk         = (double)PSO_INFO_LIST["vk"];
-  //PSO_OPT.GC_S_ROOF  = (int)PSO_INFO_LIST["GC_S_ROOF"];
-  //PSO_OPT.GC_F_ROOF  = (int)PSO_INFO_LIST["GC_F_ROOF"];
-  //PSO_OPT.GC_RHO     = (double)PSO_INFO_LIST["GC_RHO"];
-  //PSO_OPT.Q_cen_type = (int)PSO_INFO_LIST["Q_cen_type"];
-  //PSO_OPT.Q_a0       = (double)PSO_INFO_LIST["Q_a0"];
-  //PSO_OPT.Q_a1       = (double)PSO_INFO_LIST["Q_a1"];
-  //PSO_OPT.Q_a_var    = (double)PSO_INFO_LIST["Q_a_var"];
-  //PSO_OPT.LcRi_L      = (double)PSO_INFO_LIST["LcRi_L"];
+  PSO_OPTS.maxIter    = (int)PSO_INFO_LIST["maxIter"];
+  //PSO_OPTS.checkConv  = (int)PSO_INFO_LIST["checkConv"]);
+  //PSO_OPTS.typePSO    = (int)PSO_INFO_LIST["typePSO"]);
+  PSO_OPTS.freeRun    = (double)PSO_INFO_LIST["freeRun"];
+  PSO_OPTS.tol        = (double)PSO_INFO_LIST["tol"];
+  PSO_OPTS.c1         = (double)PSO_INFO_LIST["c1"];
+  PSO_OPTS.c2         = (double)PSO_INFO_LIST["c2"];
+  PSO_OPTS.w0         = (double)PSO_INFO_LIST["w0"];
+  PSO_OPTS.w1         = (double)PSO_INFO_LIST["w1"];
+  PSO_OPTS.w_var      = (double)PSO_INFO_LIST["w_var"];
+  //PSO_OPTS.chi        = (double)PSO_INFO_LIST["chi"];
+  PSO_OPTS.vk         = (double)PSO_INFO_LIST["vk"];
+  //PSO_OPTS.GC_S_ROOF  = (int)PSO_INFO_LIST["GC_S_ROOF"];
+  //PSO_OPTS.GC_F_ROOF  = (int)PSO_INFO_LIST["GC_F_ROOF"];
+  //PSO_OPTS.GC_RHO     = (double)PSO_INFO_LIST["GC_RHO"];
+  //PSO_OPTS.Q_cen_type = (int)PSO_INFO_LIST["Q_cen_type"];
+  //PSO_OPTS.Q_a0       = (double)PSO_INFO_LIST["Q_a0"];
+  //PSO_OPTS.Q_a1       = (double)PSO_INFO_LIST["Q_a1"];
+  //PSO_OPTS.Q_a_var    = (double)PSO_INFO_LIST["Q_a_var"];
+  //PSO_OPTS.LcRi_L      = (double)PSO_INFO_LIST["LcRi_L"];
 }
 
