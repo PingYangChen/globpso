@@ -61,8 +61,8 @@
 #' res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, PSO_INFO = alg_setting, loc = loc_shift)
 #' res_c_large$history
 #' 
-#' @references Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198. 
-#' @references Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2):191-204.
+# @references Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198. 
+# @references Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2):191-204.
 #' @references Shi, Y., & Eberhart, R. (1998, May). A modified particle swarm optimizer. In Evolutionary Computation Proceedings, 1998. IEEE World Congress on Computational Intelligence., The 1998 IEEE International Conference on (pp. 69-73). IEEE.
 #' @references Sun, J., Wu, X., Palade, V., Fang, W., Lai, C.-H., and Xu, W. (2012). Convergence analysis and improvements of quantum-behaved particle swarm optimization. Information Sciences, 193:81-103.
 #' @name globpso
