@@ -74,7 +74,7 @@ using namespace Rcpp;
 // [[Rcpp::plugins(openmp)]]
 
 // DEFINE STUCTURES OF PSO INFORMATION
-struct PSO_OPTIONS {
+typedef struct {
 	/* Copy PSO parameters to 'genCppCode_PSOParaSetting.r'
 		 for generating required C++ and R codes.
 		 Please DO follow the format below.
@@ -111,7 +111,7 @@ struct PSO_OPTIONS {
 	//double Q_a_var; // 0.8
   // LcRiPSO
   //double LcRi_L; // 0.01
-};
+} PSO_OPTIONS, *Ptr_PSO_OPTIONS;
 
 // DEFINE STUCTURES OF PSO PARAMETERS WHICH WILL CHANGE ITERATIVELY
 typedef struct {
@@ -147,7 +147,7 @@ typedef struct {
 // DECLARE FUNCTIONS
 void matrixPrintf(const mat &m);
 void rvecPrintf(const rowvec &v);
-void getAlgStruct(PSO_OPTIONS PSO_OPTS, const Rcpp::List PSO_INFO_LIST);
+void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST);
 void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
               const bool IF_PARALLEL, const bool COUNTER_ON, PSO_Result &PSO_Result);
 void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN, 
@@ -184,37 +184,37 @@ void rvecPrintf(const rowvec &v)
 
 
 // PSO OPTIONS
-void getAlgStruct(PSO_OPTIONS PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
+void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
 {
-  PSO_OPTS.nSwarm     = (int)PSO_INFO_LIST["nSwarm"];
-  PSO_OPTS.dSwarm     = (int)PSO_INFO_LIST["dSwarm"];
+  PSO_OPTS.nSwarm     = (int)Rcpp::as<int>(PSO_INFO_LIST["nSwarm"]);
+  PSO_OPTS.dSwarm     = (int)Rcpp::as<int>(PSO_INFO_LIST["dSwarm"]);
 
-  Rcpp::NumericVector varUpper_Tmp   = as<NumericVector>(PSO_INFO_LIST["varUpper"]);
+  Rcpp::NumericVector varUpper_Tmp   = Rcpp::as<Rcpp::NumericVector>(PSO_INFO_LIST["varUpper"]);
   arma::rowvec varUpper(varUpper_Tmp.begin(), varUpper_Tmp.size(), false);
-  Rcpp::NumericVector varLower_Tmp   = as<NumericVector>(PSO_INFO_LIST["varLower"]);
+  Rcpp::NumericVector varLower_Tmp   = Rcpp::as<Rcpp::NumericVector>(PSO_INFO_LIST["varLower"]);
   arma::rowvec varLower(varLower_Tmp.begin(), varLower_Tmp.size(), false);
   PSO_OPTS.varUpper   = varUpper;
   PSO_OPTS.varLower   = varLower;
 
-  PSO_OPTS.maxIter    = (int)PSO_INFO_LIST["maxIter"];
-  //PSO_OPTS.checkConv  = (int)PSO_INFO_LIST["checkConv"]);
-  //PSO_OPTS.typePSO    = (int)PSO_INFO_LIST["typePSO"]);
-  PSO_OPTS.freeRun    = (double)PSO_INFO_LIST["freeRun"];
-  PSO_OPTS.tol        = (double)PSO_INFO_LIST["tol"];
-  PSO_OPTS.c1         = (double)PSO_INFO_LIST["c1"];
-  PSO_OPTS.c2         = (double)PSO_INFO_LIST["c2"];
-  PSO_OPTS.w0         = (double)PSO_INFO_LIST["w0"];
-  PSO_OPTS.w1         = (double)PSO_INFO_LIST["w1"];
-  PSO_OPTS.w_var      = (double)PSO_INFO_LIST["w_var"];
-  //PSO_OPTS.chi        = (double)PSO_INFO_LIST["chi"];
-  PSO_OPTS.vk         = (double)PSO_INFO_LIST["vk"];
-  //PSO_OPTS.GC_S_ROOF  = (int)PSO_INFO_LIST["GC_S_ROOF"];
-  //PSO_OPTS.GC_F_ROOF  = (int)PSO_INFO_LIST["GC_F_ROOF"];
-  //PSO_OPTS.GC_RHO     = (double)PSO_INFO_LIST["GC_RHO"];
-  //PSO_OPTS.Q_cen_type = (int)PSO_INFO_LIST["Q_cen_type"];
-  //PSO_OPTS.Q_a0       = (double)PSO_INFO_LIST["Q_a0"];
-  //PSO_OPTS.Q_a1       = (double)PSO_INFO_LIST["Q_a1"];
-  //PSO_OPTS.Q_a_var    = (double)PSO_INFO_LIST["Q_a_var"];
-  //PSO_OPTS.LcRi_L      = (double)PSO_INFO_LIST["LcRi_L"];
+  PSO_OPTS.maxIter    = (int)Rcpp::as<int>(PSO_INFO_LIST["maxIter"]);
+  //PSO_OPTS.checkConv  = (int)Rcpp::as<int>(PSO_INFO_LIST["checkConv"]);
+  //PSO_OPTS.typePSO    = (int)Rcpp::as<int>(PSO_INFO_LIST["typePSO"]);
+  PSO_OPTS.freeRun    = (double)Rcpp::as<double>(PSO_INFO_LIST["freeRun"]);
+  PSO_OPTS.tol        = (double)Rcpp::as<double>(PSO_INFO_LIST["tol"]);
+  PSO_OPTS.c1         = (double)Rcpp::as<double>(PSO_INFO_LIST["c1"]);
+  PSO_OPTS.c2         = (double)Rcpp::as<double>(PSO_INFO_LIST["c2"]);
+  PSO_OPTS.w0         = (double)Rcpp::as<double>(PSO_INFO_LIST["w0"]);
+  PSO_OPTS.w1         = (double)Rcpp::as<double>(PSO_INFO_LIST["w1"]);
+  PSO_OPTS.w_var      = (double)Rcpp::as<double>(PSO_INFO_LIST["w_var"]);
+  //PSO_OPTS.chi        = (double)Rcpp::as<double>(PSO_INFO_LIST["chi"]);
+  PSO_OPTS.vk         = (double)Rcpp::as<double>(PSO_INFO_LIST["vk"]);
+  //PSO_OPTS.GC_S_ROOF  = (int)Rcpp::as<int>(PSO_INFO_LIST["GC_S_ROOF"]);
+  //PSO_OPTS.GC_F_ROOF  = (int)Rcpp::as<int>(PSO_INFO_LIST["GC_F_ROOF"]);
+  //PSO_OPTS.GC_RHO     = (double)Rcpp::as<double>(PSO_INFO_LIST["GC_RHO"]);
+  //PSO_OPTS.Q_cen_type = (int)Rcpp::as<int>(PSO_INFO_LIST["Q_cen_type"]);
+  //PSO_OPTS.Q_a0       = (double)Rcpp::as<double>(PSO_INFO_LIST["Q_a0"]);
+  //PSO_OPTS.Q_a1       = (double)Rcpp::as<double>(PSO_INFO_LIST["Q_a1"]);
+  //PSO_OPTS.Q_a_var    = (double)Rcpp::as<double>(PSO_INFO_LIST["Q_a_var"]);
+  //PSO_OPTS.LcRi_L     = (double)Rcpp::as<double>(PSO_INFO_LIST["LcRi_L"]);
 }
 

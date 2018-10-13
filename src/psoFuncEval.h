@@ -25,8 +25,8 @@ void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const mat swar
 		for (int iSwarm = 0; iSwarm < nSwarm; iSwarm++) {
 			rowvec PARTICLE = arma::conv_to<rowvec>::from(swarm.row(iSwarm));
 			Shield<SEXP> PARTICLE_SEXP(Rcpp::wrap(PARTICLE));
-			Rcpp::NumericVector PARTICLE_Rform = Rcpp::as<Rcpp::NumericVector>(PARTICLE_SEXP);
-			feval = (double) objfunc->eval(PARTICLE_Rform);
+			//Rcpp::NumericVector PARTICLE_Rform = Rcpp::as<Rcpp::NumericVector>(PARTICLE_SEXP);
+			feval = (double) objfunc->eval(PARTICLE_SEXP);
 			fSwarm(iSwarm) = feval;
 		}
   //}

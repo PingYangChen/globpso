@@ -18,7 +18,47 @@
 #' @details
 #' TBD
 #' @examples
-#' TBD
+#' library(globpso)
+#' 
+#' # Optimize the 3-dimensional quadratic objective function with location shift
+#' objf <- function(x, loc) {
+#'   val <- 0
+#'   for (i in 1:length(x)) val <- val + (x[i] - loc)^2
+#'   return(val)
+#' }
+#' 
+#' # The search domain is [-5, 5]^3
+#' upp_bound <- rep(5, 3)
+#' low_bound <- rep(-5, 3)
+#' 
+#' # Define the location shift to be 1
+#' loc_shift < -1
+#' 
+#' # Run PSO for this optimization problem
+#' # Also input the enviorment variable, the location shift 'loc_shift'
+#' res <- globpso(objFunc = objf, lower = low_bound, upper = upp_bound, loc = loc_shift)
+#' res$par
+#' res$val
+#' 
+#' # One can also write C++ objective function to further accelerate the computation
+#' objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
+#'     double val = 0;
+#'     double loc_c = (double)Rcpp::as<double>(loc);
+#'     arma::rowvec x_c = (arma::rowvec)Rcpp::as<arma::rowvec>(x);
+#'     for (arma::uword i = 0; i < x_c.n_elem; i++) {
+#'       val += (x_c(i) - loc_c)*(x_c(i) - loc_c);
+#'     }
+#'     return val;
+#'   }', depends = "RcppArmadillo")
+#' res_c <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = loc_shift)
+#' res_c$par
+#' res_c$val
+#' 
+#' # Use getPSOInfo() to change the PSO options
+#' alg_setting <- getPSOInfo(nSwarm = 64, maxIter = 200)
+#' res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, PSO_INFO = alg_setting, loc = loc_shift)
+#' res_c_large$history
+#' 
 #' @references Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198. 
 #' @references Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2):191-204.
 #' @references Sun, J., Wu, X., Palade, V., Fang, W., Lai, C.-H., and Xu, W. (2012). Convergence analysis and improvements of quantum-behaved particle swarm optimization. Information Sciences, 193:81-103.
@@ -94,14 +134,7 @@ globpso <- function(objFunc, lower, upper, psoType = "basic",
 #' # Get default settings with specified swarm size and maximal number of iterations.
 #' PSO_INFO <- getPSOInfo(nSwarm = 32, maxIter = 100)
 #'
-#' # If wanted to disable L-BFGS for the inner optimization loop and
-#' # use NestedPSO algorithm (Chen et al., 2015), we need the options
-#' # for the two-layer PSO: c(outer loop option, inner loop option)
-#' NESTEDPSO_INFO <- getPSOInfo(nSwarm = c(16, 32), maxIter = c(100, 200))
-#' # Also, disable the L-BFGS algorithm
-#' LBFGS_NOTRUN <- getLBFGSInfo(IF_INNER_LBFGS = FALSE)
-#'
-#' @references Chen, R.-B., Chang, S.-P., Wang, W., Tung, H.-C., and Wong, W. K. (2015). Minimax optimal designs via particle swarm optimization methods. Statistics and Computing, 25(5):975-988.
+# @references Chen, R.-B., Chang, S.-P., Wang, W., Tung, H.-C., and Wong, W. K. (2015). Minimax optimal designs via particle swarm optimization methods. Statistics and Computing, 25(5):975-988.
 #' @name getPSOInfo
 #' @rdname getPSOInfo
 #' @export
