@@ -1,16 +1,16 @@
 
-void psoUpdateParticle(const int LOOPID, PSO_OPTIONS PSO_OPTS[], const PSO_DYN PSO_DYN, 
+void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN, 
 							 				 const arma::mat PBest, const arma::rowvec GBest, 
 							 				 const arma::rowvec velMax, const arma::rowvec varUpper, const arma::rowvec varLower,
 							 				 arma::mat &vStep, arma::mat &swarm)
 {
   int dSwarm = (int)swarm.n_cols;
   int nSwarm = (int)swarm.n_rows;
-	//int typePSO = PSO_OPTS[LOOPID].typePSO;
+	//int typePSO = PSO_OPTS.typePSO;
 	int typePSO = 0;
-	double c1 = PSO_OPTS[LOOPID].c1;
-  double c2 = PSO_OPTS[LOOPID].c2;
-  //double chi = PSO_OPTS[LOOPID].chi;
+	double c1 = PSO_OPTS.c1;
+  double c2 = PSO_OPTS.c2;
+  //double chi = PSO_OPTS.chi;
 	
 	arma::mat velMax_Mat = repmat(velMax, nSwarm, 1);
 	arma::mat GBmat = repmat(GBest, nSwarm, 1);
@@ -44,7 +44,7 @@ void psoUpdateParticle(const int LOOPID, PSO_OPTIONS PSO_OPTS[], const PSO_DYN P
 			arma::mat PM = PHI % PBest + (1.0 - PHI) % GBmat;
 			
 			arma::mat QuantumMove;
-			if (PSO_OPTS[LOOPID].Q_cen_type == 0) {
+			if (PSO_OPTS.Q_cen_type == 0) {
 				QuantumMove = PSO_DYN.Q_a_cur*arma::abs(PM - swarm) % arma::log(1/randu(nSwarm, dSwarm));
 			} else {
 				arma::mat MBest = repmat(arma::sum(PBest, 0)/((double)nSwarm), nSwarm, 1);
