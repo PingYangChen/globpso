@@ -32,7 +32,7 @@
 #' low_bound <- rep(-5, 3)
 #' 
 #' # Define the location shift to be 1
-#' loc_shift < -1
+#' loc_shift <- 1
 #' 
 #' # Run PSO for this optimization problem
 #' # Also input the enviorment variable, the location shift 'loc_shift'
@@ -41,6 +41,8 @@
 #' res$val
 #' 
 #' # One can also write C++ objective function to further accelerate the computation
+#' library(Rcpp)
+#' library(RcppArmadillo)
 #' objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
 #'     double val = 0;
 #'     double loc_c = (double)Rcpp::as<double>(loc);
@@ -55,29 +57,30 @@
 #' res_c$val
 #' 
 #' # Use getPSOInfo() to change the PSO options
-#' alg_setting <- getPSOInfo(nSwarm = 64, maxIter = 200)
+#' alg_setting <- getPSOInfo(nSwarm = 64, maxIter = 200, psoType = "quantum")
 #' res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, PSO_INFO = alg_setting, loc = loc_shift)
 #' res_c_large$history
 #' 
 #' @references Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198. 
 #' @references Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2):191-204.
+#' @references Shi, Y., & Eberhart, R. (1998, May). A modified particle swarm optimizer. In Evolutionary Computation Proceedings, 1998. IEEE World Congress on Computational Intelligence., The 1998 IEEE International Conference on (pp. 69-73). IEEE.
 #' @references Sun, J., Wu, X., Palade, V., Fang, W., Lai, C.-H., and Xu, W. (2012). Convergence analysis and improvements of quantum-behaved particle swarm optimization. Information Sciences, 193:81-103.
 #' @name globpso
 #' @rdname globpso
 #' @export
-globpso <- function(objFunc, lower, upper, psoType = "basic", 
+globpso <- function(objFunc, lower, upper, 
 	PSO_INFO = NULL, seed = NULL, verbose = TRUE, environment, ...) {
 
   stopifnot(all(is.finite(lower)), all(is.finite(upper)),
-            length(lower) == length(upper), all(upper > lower),
-            all(names(PSO_INFO) == names(getPSOInfo()))
+            length(lower) == length(upper), all(upper > lower)
             )
 
 	if (is.null(PSO_INFO)) {
 		PSO_INFO <- getPSOInfo(nSwarm = 32, maxIter = 100)
 		if (verbose) message(paste0("Use the default settings for PSO. See '?getPSOInfo'."))
 	}
-
+	stopifnot(all(names(PSO_INFO) == names(getPSOInfo())))
+	
 	if (!hasArg(environment)) environment <- new.env()
 
 	# Fill the rest of PSO options in PSO_INFO
@@ -115,13 +118,13 @@ globpso <- function(objFunc, lower, upper, psoType = "basic",
 #' Otherwise, the PSO checks the stopping criterion after free iterations.
 #' @param tol A small value for the tolerance, \eqn{\varepsilon}, in the stopping criterion.
 #' For \code{freeRun} smaller than 1.0, the default is \code{1e-6}. Otherwise, this value would not affect the algorithm.
-# @param typePSO integer. The type of PSO. In this package, we have the following types:
-# \itemize{
-# \item{0}{ Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)}
+#' @param psoType string. The type of PSO. This package current supports the following types:
+#' \itemize{
+#' \item{"basic"}{ Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)}
 # \item{1}{ GCPSO (van den Bergh, F. and	Engelbrecht, A. P., 2002)}
-# \item{2}{ Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)}
+#' \item{"quantum"}{ Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)}
 # \item{3}{ LcRiPSO (Bonyadi, M. R., Michalewicz, Z., 2014)}
-# }
+#' }
 #' @param c1 The value of cognitive parameter in PSO updating procedure. The default is 2.05.
 #' @param c2 The value of social parameter in PSO updating procedure. The default is 2.05.
 #' @param w0 The value of starting inertia weight in PSO updating procedure. The default is 1.2.
@@ -129,6 +132,11 @@ globpso <- function(objFunc, lower, upper, psoType = "basic",
 #' @param w_var A number between \eqn{[0,1]} that controls the percentage of iterations that PSO linearly decreases the inertia weight
 #' from \code{w0} to \code{w1}. The default is 0.8.
 #' @param vk The value of velocity clamping parameter. The default is 4.
+#' @param Q_cen_type The type of the center position in QPSO updating procedure (\code{0}: local attractor, default; \code{1}: mean best).
+#' @param Q_a0 The value of starting contraction-expansion (CE) coefficient in QPSO updating procedure. The default is 1.7.
+#' @param Q_a1 The value of ending contraction-expansion (CE) coefficient in QPSO updating procedure. The default is 0.7.
+#' @param Q_a_var A number between \eqn{[0,1]} that controls the percentage of iterations that QPSO linearly decreases the CE coefficient
+#' from \code{Q_a0} to \code{Q_a1}. The default is 0.8.
 #' @return A list of PSO parameter settings.
 #' @examples
 #' # Get default settings with specified swarm size and maximal number of iterations.
@@ -138,15 +146,22 @@ globpso <- function(objFunc, lower, upper, psoType = "basic",
 #' @name getPSOInfo
 #' @rdname getPSOInfo
 #' @export
-getPSOInfo <- function(nSwarm = 32, maxIter = 100,
-  #typePSO = 0, #dSwarm = NULL, varUpper = NULL, varLower = NULL, checkConv = 0,
+getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
+  #dSwarm = NULL, varUpper = NULL, varLower = NULL, checkConv = 0,
   freeRun = 1.0, tol = 1e-6, c1 = 2.05, c2 = 2.05,
-  w0 = 1.2, w1 = 0.2, w_var = 0.8, vk = 4 #, chi = NULL,
-  #typeTopo = NULL, nGroup = NULL, GC_S_ROOF = 5, GC_F_ROOF = 15, GC_RHO = 1,
-  #Q_cen_type = 1, Q_a0 = 1.7, Q_a1 = 0.7, Q_a_var = 0.8, LcRi_L = 0.01,
+  w0 = 1.2, w1 = 0.2, w_var = 0.8, vk = 4, #, chi = NULL,
+  #GC_S_ROOF = 5, GC_F_ROOF = 15, GC_RHO = 1,
+  Q_cen_type = 1, Q_a0 = 1.7, Q_a1 = 0.7, Q_a_var = 0.8#, LcRi_L = 0.01,
   ) {
 
-  stopifnot(length(nSwarm) == length(maxIter))
+  stopifnot(length(nSwarm) == 1)
+  if (!(psoType %in% c("basic", "quantum"))) {
+		stop("Currently the function supports: \n
+			psoType = 'basic' for basic PSO algorithm.\n
+			psoType = 'quantum' for quantum PSO algorithm.")
+	} else {
+		typePSO <- ifelse(psoType == "basic", 0, 2)
+	}
 
   nLoop <- length(nSwarm)
   #if (length(dSwarm))     dSwarm     <- numeric(nLoop)
@@ -154,7 +169,7 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100,
   #if (length(varLower))   varLower   <- matrix(0, nLoop)
   #if (length(maxIter))    maxIter    <- rep(100   , nLoop)
   #if (length(checkConv) < nLoop)  checkConv  <- rep(checkConv, nLoop)
-  #if (length(typePSO)) < nLoop)    typePSO    <- rep(0     , nLoop)
+  if (length(typePSO) < nLoop)    typePSO    <- rep(typePSO, nLoop)
   if (length(freeRun) < nLoop)    freeRun    <- rep(freeRun, nLoop)
   if (length(tol) < nLoop)        tol        <- rep(tol, nLoop)
   if (length(c1) < nLoop)         c1         <- rep(c1, nLoop)
@@ -164,21 +179,21 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100,
   if (length(w_var) < nLoop)      w_var      <- rep(w_var, nLoop)
   #if (length(chi) < nLoop)        chi        <- rep(0.729 , nLoop)
   if (length(vk) < nLoop)         vk         <- rep(vk, nLoop)
-  #if (length(typeTopo) < nLoop)   typeTopo   <- rep(0     , nLoop)
-  #if (length(nGroup) < nLoop)     nGroup     <- rep(1     , nLoop)
   #if (length(GC_S_ROOF) < nLoop)  GC_S_ROOF  <- rep(5     , nLoop)
   #if (length(GC_F_ROOF) < nLoop)  GC_F_ROOF  <- rep(15    , nLoop)
   #if (length(GC_RHO) < nLoop)     GC_RHO     <- rep(1     , nLoop)
-  #if (length(Q_cen_type) < nLoop) Q_cen_type <- rep(1     , nLoop)
-  #if (length(Q_a0) < nLoop)       Q_a0       <- rep(1.7   , nLoop)
-  #if (length(Q_a1) < nLoop)       Q_a1       <- rep(0.7   , nLoop)
-  #if (length(Q_a_var) < nLoop)    Q_a_var    <- rep(0.8   , nLoop)
+  if (length(Q_cen_type) < nLoop) Q_cen_type <- rep(Q_cen_type, nLoop)
+  if (length(Q_a0) < nLoop)       Q_a0       <- rep(Q_a0, nLoop)
+  if (length(Q_a1) < nLoop)       Q_a1       <- rep(Q_a1, nLoop)
+  if (length(Q_a_var) < nLoop)    Q_a_var    <- rep(Q_a_var, nLoop)
   #if (length(LcRi_L) < nLoop)     LcRi_L     <- rep(0.01  , nLoop)
 
-  list(nSwarm = nSwarm, dSwarm = "autogen", varUpper = "autogen", varLower = "autogen", maxIter = maxIter, #typePSO = typePSO, checkConv = checkConv,
+  list(nSwarm = nSwarm, dSwarm = "autogen", varUpper = "autogen", varLower = "autogen", maxIter = maxIter, 
+  	typePSO = typePSO, #checkConv = checkConv,
     freeRun = freeRun, tol = tol, c1 = c1, c2 = c2, w0 = w0, w1 = w1, w_var = w_var, #chi = chi,
-    vk = vk #, #typeTopo = typeTopo, nGroup = nGroup, GC_S_ROOF = GC_S_ROOF, GC_F_ROOF = GC_F_ROOF,
-    #GC_RHO = GC_RHO, Q_cen_type = Q_cen_type, Q_a0 = Q_a0, Q_a1 = Q_a1, Q_a_var = Q_a_var,
+    vk = vk,  #GC_S_ROOF = GC_S_ROOF, GC_F_ROOF = GC_F_ROOF,
+    #GC_RHO = GC_RHO, 
+    Q_cen_type = Q_cen_type, Q_a0 = Q_a0, Q_a1 = Q_a1, Q_a_var = Q_a_var
     #LcRi_L = LcRi_L,
     )
 }

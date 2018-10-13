@@ -2,21 +2,29 @@ void psoUpdateDynPara(PSO_OPTIONS PSO_OPTS, const int iter, PSO_DYN &PSO_DYN,
 											const arma::mat swarm, const arma::mat PBest, const arma::rowvec GBest,
 											const arma::vec fSwarm, const arma::vec fPBest, const double fGBest)
 {
+	int typePSO = PSO_OPTS.typePSO;
   if (iter < 0) { // INITIALIZE
-
-  	//PSO_DYN.succ_GB	= 0;
-
-  	int w_varyfor = (int)(PSO_OPTS.w_var*PSO_OPTS.maxIter);
-  	PSO_DYN.w_varyfor	= w_varyfor;
-	  PSO_DYN.w_cur			= PSO_OPTS.w0;
-	  PSO_DYN.w_dec			= (PSO_OPTS.w0 - PSO_OPTS.w1)/w_varyfor;      // Inertia weight change per iteration step
-	  // Quantum PSO 
-	  /*
-	  int Q_a_varyfor = (int)(PSO_OPTS.Q_a_var*PSO_OPTS.maxIter);
-  	PSO_DYN.Q_a_varyfor	= Q_a_varyfor;
-		PSO_DYN.Q_a_cur			= PSO_OPTS.Q_a0;
-		PSO_DYN.Q_a_dec			= (PSO_OPTS.Q_a0 - PSO_OPTS.Q_a1)/Q_a_varyfor;
+		switch (typePSO) {
+			case 0: // Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)
+			{	// The most common one
+		  	int w_varyfor = (int)(PSO_OPTS.w_var*PSO_OPTS.maxIter);
+		  	PSO_DYN.w_varyfor	= w_varyfor;
+			  PSO_DYN.w_cur			= PSO_OPTS.w0;
+			  PSO_DYN.w_dec			= (PSO_OPTS.w0 - PSO_OPTS.w1)/w_varyfor;      // Inertia weight change per iteration step											
+				break;
+			}
+			case 2: // Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)
+	  	{
+	  		int Q_a_varyfor = (int)(PSO_OPTS.Q_a_var*PSO_OPTS.maxIter);
+		  	PSO_DYN.Q_a_varyfor	= Q_a_varyfor;
+				PSO_DYN.Q_a_cur			= PSO_OPTS.Q_a0;
+				PSO_DYN.Q_a_dec			= (PSO_OPTS.Q_a0 - PSO_OPTS.Q_a1)/Q_a_varyfor;
+				break;
+	  	}
+	  }
+		/*
 		// Guarantee Convergence PSO 
+		//PSO_DYN.succ_GB	= 0;
 		PSO_DYN.GC_S_COUNT	= 0; 
 		PSO_DYN.GC_F_COUNT	= 0;
 		PSO_DYN.GC_RHO			= PSO_OPTS.GC_RHO; 
@@ -30,11 +38,19 @@ void psoUpdateDynPara(PSO_OPTIONS PSO_OPTS, const int iter, PSO_DYN &PSO_DYN,
 		PSO_DYN.LcRi_sigG = LcRi_sigG;
 		*/
   } else { // UPDATE
-    
-		if (iter <= PSO_DYN.w_varyfor) 		PSO_DYN.w_cur = PSO_DYN.w_cur - PSO_DYN.w_dec; 
-		/*
-		// QPSO
-    if (iter <= PSO_DYN.Q_a_varyfor)	PSO_DYN.Q_a_cur = PSO_DYN.Q_a_cur - PSO_DYN.Q_a_dec; 
+		switch (typePSO) {
+			case 0: // Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)
+			{	// The most common one
+				if (iter <= PSO_DYN.w_varyfor) 		PSO_DYN.w_cur = PSO_DYN.w_cur - PSO_DYN.w_dec; 										
+				break;
+			}
+			case 2: // Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)
+	  	{
+	  		if (iter <= PSO_DYN.Q_a_varyfor)	PSO_DYN.Q_a_cur = PSO_DYN.Q_a_cur - PSO_DYN.Q_a_dec;
+				break;
+	  	}
+	  }
+    /*
 		// GCPSO
 		if (PSO_OPTS.typePSO == 1) {
 			if (PSO_DYN.succ_GB == 1) { 

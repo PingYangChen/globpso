@@ -6,8 +6,8 @@ void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 {
   int dSwarm = (int)swarm.n_cols;
   int nSwarm = (int)swarm.n_rows;
-	//int typePSO = PSO_OPTS.typePSO;
-	int typePSO = 0;
+	int typePSO = PSO_OPTS.typePSO;
+	//int typePSO = 0;
 	double c1 = PSO_OPTS.c1;
   double c2 = PSO_OPTS.c2;
   //double chi = PSO_OPTS.chi;
@@ -37,6 +37,7 @@ void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 			swarm += vStep;		
 			break;
 		}
+		*/
 		case 2: // Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)
 		{
 			arma::mat R1 = randu(nSwarm, dSwarm); arma::mat R2 = randu(nSwarm, dSwarm);
@@ -58,6 +59,7 @@ void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 			swarm.elem(find(DICE <= 0.5)) -= QuantumMove.elem(find(DICE <= 0.5));			
 			break;
 		}
+		/*
 		case 3: // LcRiPSO (Bonyadi, M. R., Michalewicz, Z., 2014)
 		{
 			arma::mat normPB = PBest + randn(nSwarm, dSwarm) % repmat(PSO_DYN.LcRi_sigP, 1, dSwarm);
