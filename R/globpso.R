@@ -87,7 +87,6 @@ globpso <- function(objFunc, lower, upper,
 	cputime <- system.time(
 		psoOut <- cppPSO(objFunc, PSO_INFO, environment, FALSE, verbose)
 	)[3]
-
 	if (verbose) message(paste0("CPU time: ", round(cputime, 2), " seconds."))
 
 	return(
