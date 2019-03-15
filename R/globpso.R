@@ -63,18 +63,36 @@
 #' @name globpso
 #' @rdname globpso
 #' @export
-globpso <- function(objFunc, lower, upper, 
+globpso <- function(objFunc, lower, upper, init = NULL,
 	PSO_INFO = NULL, seed = NULL, verbose = TRUE, environment, ...) {
 
-  stopifnot(all(is.finite(lower)), all(is.finite(upper)),
+  stopifnot(all(is.finite(lower)), all(is.finite(upper)), 
             length(lower) == length(upper), all(upper > lower)
             )
-
+  hasInitSwarm <- 0
+  if (!is.null(init)) {
+    if (is.vector(init)) {
+      stopifnot(length(lower) == length(init), all(upper >= init), 
+                all(is.finite(init)), all(init >= lower))
+      init <- matrix(init, 1, length(init))
+      hasInitSwarm <- 1
+    } else if (is.matrix(init)) {
+      for (i in 1:nrow(init)) {
+        stopifnot(length(lower) == length(init[i,]), all(upper >= init[i,]), 
+                  all(is.finite(init[i,])), all(init[i,] >= lower))
+      }
+      hasInitSwarm <- 1
+    }
+  }
+  
 	if (is.null(PSO_INFO)) {
-		PSO_INFO <- getPSOInfo(nSwarm = 32, maxIter = 100)
+	  nSwarm <- 32
+	  if (hasInitSwarm) { nSwarm = max(32, nrow(init)) }
+		PSO_INFO <- getPSOInfo(nSwarm = nSwarm, maxIter = 100)
 		if (verbose) message(paste0("Use the default settings for PSO. See '?getPSOInfo'."))
 	}
 	stopifnot(all(names(PSO_INFO) == names(getPSOInfo())))
+	if (hasInitSwarm) { stopifnot(PSO_INFO$nSwarm >= nrow(init)) }
 	
 	if (!hasArg(environment)) environment <- new.env()
 
@@ -82,6 +100,8 @@ globpso <- function(objFunc, lower, upper,
 	PSO_INFO$varUpper <- upper
 	PSO_INFO$varLower <- lower
 	PSO_INFO$dSwarm <- length(upper)
+	PSO_INFO$hasInitSwarm <- hasInitSwarm
+	PSO_INFO$initSwarm <- init
 	# Start
 	set.seed(seed)
 	cputime <- system.time(
@@ -90,7 +110,10 @@ globpso <- function(objFunc, lower, upper,
 	if (verbose) message(paste0("CPU time: ", round(cputime, 2), " seconds."))
 
 	return(
-		list(par = psoOut$GBest, val = psoOut$fGBest, history = psoOut$fGBestHist, cputime = cputime)
+		list(par = psoOut$GBest, val = psoOut$fGBest, 
+		     pbest = psoOut$PBest,
+		     fpbest = psoOut$fPBest,
+		     history = psoOut$fGBestHist, cputime = cputime)
 	)
 }
 
@@ -180,7 +203,8 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
   if (length(Q_a_var) < nLoop)    Q_a_var    <- rep(Q_a_var, nLoop)
   #if (length(LcRi_L) < nLoop)     LcRi_L     <- rep(0.01  , nLoop)
 
-  list(nSwarm = nSwarm, dSwarm = "autogen", varUpper = "autogen", varLower = "autogen", maxIter = maxIter, 
+  list(nSwarm = nSwarm, dSwarm = "autogen", varUpper = "autogen", varLower = "autogen", initSwarm = "autogen", 
+       hasInitSwarm = "autogen", maxIter = maxIter, 
   	typePSO = typePSO, #checkConv = checkConv,
     freeRun = freeRun, tol = tol, c1 = c1, c2 = c2, w0 = w0, w1 = w1, w_var = w_var, #chi = chi,
     vk = vk,  #GC_S_ROOF = GC_S_ROOF, GC_F_ROOF = GC_F_ROOF,

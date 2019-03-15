@@ -9,6 +9,7 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
 	int nSwarm    = PSO_OPTS.nSwarm; 
 	int dSwarm    = PSO_OPTS.dSwarm; 
 	int maxIter   = PSO_OPTS.maxIter; 
+	int hasInitSwarm = PSO_OPTS.hasInitSwarm;
 	//int checkConv = PSO_OPTS.checkConv; 
 	double freeRun   = PSO_OPTS.freeRun; 
 	double tol       = PSO_OPTS.tol; 
@@ -32,6 +33,12 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   velMax = (varUpper - varLower)/vk;
   // INITIALIZE RANDOM SWARM
   swarm = randu(nSwarm, dSwarm) % repmat(varUpper - varLower, nSwarm, 1) + repmat(varLower, nSwarm, 1);
+  if (hasInitSwarm > 0) {
+    arma::mat initSwarm = PSO_OPTS.initSwarm;
+    for (arma::uword i = 0; i < initSwarm.n_rows; i++) {
+      swarm.row(i) = initSwarm.row(i);
+    }
+  }
   // INITIALIZE VELOCITY
   vStep.fill(0);
   // INITIALIZE OBJECTIVE FUNCTION VALUES
