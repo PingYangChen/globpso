@@ -39,6 +39,12 @@ res <- globpso(objFunc = objf, lower = low_bound, upper = upp_bound,
 res$par
 res$val
 
+# Set initial values to run PSO
+initSwarm <- c(2, 2, 2)
+# initSwarm <- rbind(c(2, 2, 2), c(1, 0.1, 1)) # for more than 2 initial points
+res_i <- globpso(objFunc = objf, lower = low_bound, upper = upp_bound, 
+                 init = initSwarm, loc = loc_shift)
+
 # One can also write C++ objective function to further accelerate the computation
 library(Rcpp)
 library(RcppArmadillo)
