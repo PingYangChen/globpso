@@ -32,7 +32,8 @@ namespace Rcpp {
     private:
         SEXP fcall, env;
         double defaultfun(SEXP x) {
-          Shield<SEXP> fn(Rcpp::Rcpp_lang3(fcall, x, R_DotsSymbol));
+          //Shield<SEXP> fn(Rcpp::Rcpp_lang3(fcall, x, R_DotsSymbol));
+          Shield<SEXP> fn(::Rf_lang3(fcall, x, R_DotsSymbol));
           Shield<SEXP> sexp_fvec(::Rf_eval(fn, env));
           //SEXP sexp_fvec = Rcpp::Rcpp_eval(fn, env); // too slow
           double f_result = (double)Rcpp::as<double>(sexp_fvec);
