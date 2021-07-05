@@ -14,11 +14,11 @@ void psoCheckParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 	
 	arma::umat SwarmChange;
 	SwarmChange = find(swarm > varUB_Mat);
-	swarmTmp1 = arma::pow(arma::randu(nSwarm, dSwarm), 1e-8) % (varUB_Mat - varLB_Mat) + varLB_Mat;
+	swarmTmp1 = arma::pow(arma::randu(nSwarm, dSwarm), 5e-2) % (varUB_Mat - varLB_Mat) + varLB_Mat;
 	swarm.elem(SwarmChange) = swarmTmp1.elem(SwarmChange);
 			
 	SwarmChange = find(swarm < varLB_Mat);
-	swarmTmp1 = (1.0 - arma::pow(1.0 - arma::randu(nSwarm, dSwarm), 1e-8)) % (varUB_Mat - varLB_Mat) + varLB_Mat;
+	swarmTmp1 = (1.0 - arma::pow(1.0 - arma::randu(nSwarm, dSwarm), 5e-2)) % (varUB_Mat - varLB_Mat) + varLB_Mat;
 	swarm.elem(SwarmChange) = swarmTmp1.elem(SwarmChange);
 	/*
 	swarmTmp1 = swarm;
