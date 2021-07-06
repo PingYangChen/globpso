@@ -27,7 +27,7 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
 	PSO_DYN PSO_DYN; 
   
   int seed = PSO_OPTS.seed;
-  arma::arma_rng::set_seed(seed);
+  arma::arma_rng::set_seed(seed); 
   
   /* -- START INITIALIZATION -- */
   if (COUNTER_ON) { Rprintf("PSO Loop: Initializing .. "); }
