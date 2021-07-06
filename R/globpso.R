@@ -171,7 +171,8 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
   freeRun = 1.0, tol = 1e-6, c1 = 2.05, c2 = 2.05,
   w0 = 1.2, w1 = 0.2, w_var = 0.8, vk = 4, #, chi = NULL,
   #GC_S_ROOF = 5, GC_F_ROOF = 15, GC_RHO = 1,
-  Q_cen_type = 1, Q_a0 = 1.7, Q_a1 = 0.7, Q_a_var = 0.8#, LcRi_L = 0.01,
+  Q_cen_type = 1, Q_a0 = 1.7, Q_a1 = 0.7, Q_a_var = 0.8,#, LcRi_L = 0.01,
+  seed = NULL
   ) {
 
   stopifnot(length(nSwarm) == 1)
@@ -214,7 +215,8 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
     freeRun = freeRun, tol = tol, c1 = c1, c2 = c2, w0 = w0, w1 = w1, w_var = w_var, #chi = chi,
     vk = vk,  #GC_S_ROOF = GC_S_ROOF, GC_F_ROOF = GC_F_ROOF,
     #GC_RHO = GC_RHO, 
-    Q_cen_type = Q_cen_type, Q_a0 = Q_a0, Q_a1 = Q_a1, Q_a_var = Q_a_var
+    Q_cen_type = Q_cen_type, Q_a0 = Q_a0, Q_a1 = Q_a1, Q_a_var = Q_a_var,
     #LcRi_L = LcRi_L,
+  	seed = seed
     )
 }

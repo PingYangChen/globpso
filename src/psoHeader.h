@@ -83,6 +83,7 @@ typedef struct {
 	   type2 name2; // default2
 	   type3 name3; // default3
 	*/
+	int seed;
 	// Basic Settings
 	int nSwarm; // 64
 	int dSwarm; // 2
@@ -188,6 +189,7 @@ void rvecPrintf(const rowvec &v)
 // PSO OPTIONS
 void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
 {
+  PSO_OPTS.seed       = (int)Rcpp::as<int>(PSO_INFO_LIST["seed"]);
   PSO_OPTS.nSwarm     = (int)Rcpp::as<int>(PSO_INFO_LIST["nSwarm"]);
   PSO_OPTS.dSwarm     = (int)Rcpp::as<int>(PSO_INFO_LIST["dSwarm"]);
 

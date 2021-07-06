@@ -25,7 +25,10 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   arma::uword GBestIdx;
   arma::rowvec fGBestHist(maxIter + 1, fill::zeros);
 	PSO_DYN PSO_DYN;
-
+  
+  int seed = PSO_OPTS.seed; 
+  arma_rng::set_seed(seed) 
+  
   /* -- START INITIALIZATION -- */
   if (COUNTER_ON) { Rprintf("PSO Loop: Initializing .. "); }
   // GENERATE THE VMAX MATRIX
