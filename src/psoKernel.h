@@ -13,8 +13,8 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
 	//int checkConv = PSO_OPTS.checkConv; 
 	double freeRun   = PSO_OPTS.freeRun; 
 	double tol       = PSO_OPTS.tol; 
-  rowvec varUpper  = PSO_OPTS.varUpper;
-  rowvec varLower  = PSO_OPTS.varLower;
+  arma::rowvec varUpper  = PSO_OPTS.varUpper;
+  arma::rowvec varLower  = PSO_OPTS.varLower;
 
 	// DECLARE VARIABLES
   arma::mat swarm(nSwarm, dSwarm), vStep(nSwarm, dSwarm), PBest(nSwarm, dSwarm);//, GrBest(nGroup, dSwarm);
@@ -24,10 +24,10 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   double fGBest;
   arma::uword GBestIdx;
   arma::rowvec fGBestHist(maxIter + 1, fill::zeros);
-	PSO_DYN PSO_DYN;
+	PSO_DYN PSO_DYN; 
   
-  int seed = PSO_OPTS.seed; 
-  arma_rng::set_seed(seed) 
+  int seed = PSO_OPTS.seed;
+  arma::arma_rng::set_seed(seed);
   
   /* -- START INITIALIZATION -- */
   if (COUNTER_ON) { Rprintf("PSO Loop: Initializing .. "); }
@@ -35,7 +35,7 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   double vk = PSO_OPTS.vk;
   velMax = (varUpper - varLower)/vk;
   // INITIALIZE RANDOM SWARM
-  swarm = randu(nSwarm, dSwarm) % repmat(varUpper - varLower, nSwarm, 1) + repmat(varLower, nSwarm, 1);
+  swarm = arma::randu(nSwarm, dSwarm) % repmat(varUpper - varLower, nSwarm, 1) + repmat(varLower, nSwarm, 1);
   if (hasInitSwarm > 0) {
     arma::mat initSwarm = PSO_OPTS.initSwarm;
     for (arma::uword i = 0; i < initSwarm.n_rows; i++) {

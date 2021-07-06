@@ -183,7 +183,7 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
 	} else {
 		typePSO <- ifelse(psoType == "basic", 0, 2)
 	}
-
+  if (is.null(seed)) seed <- floor(runif(1, 1, 999999))
   nLoop <- length(nSwarm)
   #if (length(dSwarm))     dSwarm     <- numeric(nLoop)
   #if (length(varUpper))   varUpper   <- matrix(0, nLoop)

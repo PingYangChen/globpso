@@ -228,4 +228,4 @@ void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
   PSO_OPTS.Q_a_var    = (double)Rcpp::as<double>(PSO_INFO_LIST["Q_a_var"]);
   //PSO_OPTS.LcRi_L     = (double)Rcpp::as<double>(PSO_INFO_LIST["LcRi_L"]);
 }
-
+ 
