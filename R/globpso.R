@@ -72,7 +72,7 @@ globpso <- function(objFunc, lower, upper, init = NULL,
 	PSO_INFO = NULL, seed = NULL, verbose = TRUE, environment, ...) {
 
   stopifnot(all(is.finite(lower)), all(is.finite(upper)), 
-            length(lower) == length(upper), all(upper > lower)
+            length(lower) == length(upper), all(upper >= lower)
             )
   hasInitSwarm <- 0
   if (!is.null(init)) {
