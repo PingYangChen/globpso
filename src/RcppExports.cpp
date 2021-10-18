@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // cppPSO
 Rcpp::List cppPSO(SEXP OBJ_FUNC, Rcpp::List PSO_INFO_LIST, const SEXP env, const bool IF_PARALLEL, const bool VERBOSE);
 RcppExport SEXP _globpso_cppPSO(SEXP OBJ_FUNCSEXP, SEXP PSO_INFO_LISTSEXP, SEXP envSEXP, SEXP IF_PARALLELSEXP, SEXP VERBOSESEXP) {

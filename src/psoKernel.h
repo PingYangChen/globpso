@@ -26,8 +26,8 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   arma::rowvec fGBestHist(maxIter + 1, fill::zeros);
 	PSO_DYN PSO_DYN;
   
-  int seed = PSO_OPTS.seed; 
-  arma_rng::set_seed(seed) 
+  //int seed = PSO_OPTS.seed; 
+  //arma_rng::set_seed(seed); 
   
   /* -- START INITIALIZATION -- */
   if (COUNTER_ON) { Rprintf("PSO Loop: Initializing .. "); }
@@ -40,6 +40,12 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
     arma::mat initSwarm = PSO_OPTS.initSwarm;
     for (arma::uword i = 0; i < initSwarm.n_rows; i++) {
       swarm.row(i) = initSwarm.row(i);
+    }
+  }
+  rowvec fixedDims  = PSO_OPTS.fixedDims;
+  for (int j = 0; j < dSwarm; j ++) {
+    if (!std::isnan(fixedDims(j))) {
+      swarm.col(j).fill(fixedDims(j));
     }
   }
   // INITIALIZE VELOCITY

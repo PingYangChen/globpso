@@ -1,8 +1,8 @@
 Package: globpso
 Type: Package
 Title: Particle Swarm Optimization Algorithms for Minimization Problems
-Version: 0.1.0
-Date: 2018-10-13
+Version: 1.0.1
+Date: 2021-10-18
 Authors@R: person("Ping-Yang", "Chen", , "pychen.ping@gmail.com", c("aut", "cre"))
 Author: Ping-Yang Chen [aut, cre]
 Maintainer: Ping-Yang Chen <pychen.ping@gmail.com>
@@ -11,10 +11,10 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.1.1)
 Imports:
-    Rcpp (>= 0.12.18),
-    RcppArmadillo (>= 0.9.100.5.0),
+    Rcpp (>= 1.0.7),
+    RcppArmadillo (>= 0.10.7.0.0),
     utils
 LinkingTo: Rcpp, RcppArmadillo,
 RoxygenNote: 6.1.0

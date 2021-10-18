@@ -91,6 +91,7 @@ typedef struct {
   rowvec varLower; // c(0,0)
   int hasInitSwarm;
   mat initSwarm;
+  rowvec fixedDims;
 	int maxIter; // 100
 	//int checkConv; // 0
 	int typePSO; // 0
@@ -189,7 +190,7 @@ void rvecPrintf(const rowvec &v)
 // PSO OPTIONS
 void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
 {
-  PSO_OPTS.seed       = (int)Rcpp::as<int>(PSO_INFO_LIST["seed"]);
+  //PSO_OPTS.seed       = (int)Rcpp::as<int>(PSO_INFO_LIST["seed"]);
   PSO_OPTS.nSwarm     = (int)Rcpp::as<int>(PSO_INFO_LIST["nSwarm"]);
   PSO_OPTS.dSwarm     = (int)Rcpp::as<int>(PSO_INFO_LIST["dSwarm"]);
 
@@ -199,13 +200,17 @@ void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
   arma::rowvec varLower(varLower_Tmp.begin(), varLower_Tmp.size(), false);
   PSO_OPTS.varUpper   = varUpper;
   PSO_OPTS.varLower   = varLower;
-  
+
   PSO_OPTS.hasInitSwarm = (int)Rcpp::as<int>(PSO_INFO_LIST["hasInitSwarm"]);
   if (PSO_OPTS.hasInitSwarm > 0) {
     Rcpp::NumericMatrix initSwarm_Tmp   = Rcpp::as<Rcpp::NumericMatrix>(PSO_INFO_LIST["initSwarm"]);
     arma::mat initSwarm(initSwarm_Tmp.begin(), initSwarm_Tmp.nrow(), initSwarm_Tmp.ncol(), false);
     PSO_OPTS.initSwarm  = initSwarm;
   }
+
+  Rcpp::NumericVector fixedDims_Tmp = Rcpp::as<Rcpp::NumericVector>(PSO_INFO_LIST["fixedDims"]);
+  arma::rowvec fixedDims(fixedDims_Tmp.begin(), fixedDims_Tmp.size(), false);
+  PSO_OPTS.fixedDims = fixedDims;
   
   PSO_OPTS.maxIter    = (int)Rcpp::as<int>(PSO_INFO_LIST["maxIter"]);
   //PSO_OPTS.checkConv  = (int)Rcpp::as<int>(PSO_INFO_LIST["checkConv"]);
