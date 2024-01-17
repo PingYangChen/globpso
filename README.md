@@ -1,6 +1,6 @@
 globpso
 =======
-This package collects the powerful variants of particle swarm optimization algorithm.  Currently it supports the basic PSO algorithm and the Quantum-behaved PSO algorithm.  
+This package collects the powerful variants of particle swarm optimization algorithm.  Currently it supports the basic PSO algorithm and the Quantum-behaved PSO algorithm.
 
 Installation
 ------------
