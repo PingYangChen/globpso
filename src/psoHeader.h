@@ -115,7 +115,11 @@ typedef struct {
 	double Q_a1; // 0.7
 	double Q_a_var; // 0.8
   // LcRiPSO
-  //double LcRi_L; // 0.01
+  double LcRi_L; // 0.01
+  // CSO
+  double CSO_phi; // 0.1
+  // DExPSO
+  double TE_b; // 2
 } PSO_OPTIONS, *Ptr_PSO_OPTIONS;
 
 // DEFINE STUCTURES OF PSO PARAMETERS WHICH WILL CHANGE ITERATIVELY
@@ -134,8 +138,8 @@ typedef struct {
   double Q_a_cur; // Q_a0;
   double Q_a_dec; // (Q_a0 - Q_a1)/Q_a_varyfor;
   // LcRiPSO
-  //vec LcRi_sigP;
-  //vec LcRi_sigG;
+  vec LcRi_sigP;
+  vec LcRi_sigG;
 } PSO_DYN, *Ptr_PSO_DYN;
 
 // DEFINE PSO RESULTS
@@ -155,7 +159,7 @@ void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST);
 void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
               const bool IF_PARALLEL, const bool COUNTER_ON, PSO_Result &PSO_Result);
 void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN, 
-							 				 const arma::mat PBest, const arma::rowvec GBest, 
+                       const arma::vec fSwarm, const arma::mat PBest, const arma::rowvec GBest, 
 							 				 const arma::rowvec velMax, const arma::rowvec varUpper, const arma::rowvec varLower,
 							 				 arma::mat &vStep, arma::mat &swarm);
 void psoCheckParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN, 
@@ -163,7 +167,7 @@ void psoCheckParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 void psoUpdateDynPara(PSO_OPTIONS PSO_OPTS, const int iter, PSO_DYN &PSO_DYN, 
 											const arma::mat swarm, const arma::mat PBest, const arma::rowvec GBest,
 											const arma::vec fSwarm, const arma::vec fPBest, const double fGBest);
-void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const mat swarm, vec &fSwarm);
+void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const arma::mat swarm, arma::vec &fSwarm);
 #include "psoFuncEval.h"
 #include "psoCheckParticle.h"
 #include "psoUpdateParticle.h"
@@ -231,6 +235,8 @@ void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST)
   PSO_OPTS.Q_a0       = (double)Rcpp::as<double>(PSO_INFO_LIST["Q_a0"]);
   PSO_OPTS.Q_a1       = (double)Rcpp::as<double>(PSO_INFO_LIST["Q_a1"]);
   PSO_OPTS.Q_a_var    = (double)Rcpp::as<double>(PSO_INFO_LIST["Q_a_var"]);
-  //PSO_OPTS.LcRi_L     = (double)Rcpp::as<double>(PSO_INFO_LIST["LcRi_L"]);
+  PSO_OPTS.LcRi_L     = (double)Rcpp::as<double>(PSO_INFO_LIST["LcRi_L"]);
+  PSO_OPTS.CSO_phi    = (double)Rcpp::as<double>(PSO_INFO_LIST["CSO_phi"]);
+  PSO_OPTS.TE_b    = (double)Rcpp::as<double>(PSO_INFO_LIST["TE_b"]);
 }
 

@@ -153,7 +153,9 @@ globpso <- function(objFunc, lower, upper, init = NULL, fixed = NULL,
 #' \item{"basic"}{ Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)}
 # \item{1}{ GCPSO (van den Bergh, F. and	Engelbrecht, A. P., 2002)}
 #' \item{"quantum"}{ Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)}
-# \item{3}{ LcRiPSO (Bonyadi, M. R., Michalewicz, Z., 2014)}
+#' \item{"lcri"}{ LcRiPSO (Bonyadi, M. R., Michalewicz, Z., 2014)}
+#' \item{"comp"}{ Competitive Swarm Optimization (Cheng, R., Jin, Y. 2014)}
+#' \item{"dexp"}{ DExPSO (Under review)}
 #' }
 #' @param c1 The value of cognitive parameter in PSO updating procedure. The default is 2.05.
 #' @param c2 The value of social parameter in PSO updating procedure. The default is 2.05.
@@ -179,16 +181,31 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
   freeRun = 1.0, tol = 1e-6, c1 = 2.05, c2 = 2.05,
   w0 = 1.2, w1 = 0.2, w_var = 0.8, vk = 4, #, chi = NULL,
   #GC_S_ROOF = 5, GC_F_ROOF = 15, GC_RHO = 1,
-  Q_cen_type = 1, Q_a0 = 1.7, Q_a1 = 0.7, Q_a_var = 0.8#, LcRi_L = 0.01,
+  Q_cen_type = 1, Q_a0 = 1.7, Q_a1 = 0.7, Q_a_var = 0.8, LcRi_L = 0.01,
+  CSO_phi = 0.1, TE_b = 2
   ) {
 
   stopifnot(length(nSwarm) == 1)
-  if (!(psoType %in% c("basic", "quantum"))) {
+  if (!(psoType %in% c("basic", "quantum", "lcri", "comp", "dexp"))) {
 		stop("Currently the function supports: \n
 			psoType = 'basic' for basic PSO algorithm.\n
-			psoType = 'quantum' for quantum PSO algorithm.")
+			psoType = 'quantum' for quantum PSO algorithm. \n
+      psoType = 'lcri' for LcRi PSO algorithm. \n
+      psoType = 'comp' for Competitive Swarm Optimizer algorithm. \n
+		  psoType = 'dexp' for DExPSO algorithm.   
+		")
 	} else {
-		typePSO <- ifelse(psoType == "basic", 0, 2)
+	  if (psoType == "basic") {
+	    typePSO <- 0
+	  } else if (psoType == "quantum") {
+	    typePSO <- 2
+	  } else if (psoType == "lcri") {
+	    typePSO <- 4
+	  } else if (psoType == "comp") {
+	    typePSO <- 5
+	  } else if (psoType == "dexp") {
+	    typePSO <- 2024
+	  }
 	}
 
   nLoop <- length(nSwarm)
@@ -214,7 +231,9 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
   if (length(Q_a0) < nLoop)       Q_a0       <- rep(Q_a0, nLoop)
   if (length(Q_a1) < nLoop)       Q_a1       <- rep(Q_a1, nLoop)
   if (length(Q_a_var) < nLoop)    Q_a_var    <- rep(Q_a_var, nLoop)
-  #if (length(LcRi_L) < nLoop)     LcRi_L     <- rep(0.01  , nLoop)
+  if (length(LcRi_L) < nLoop)     LcRi_L     <- rep(0.01  , nLoop)
+  if (length(CSO_phi) < nLoop)    CSO_phi    <- rep(0.1   , nLoop)
+  if (length(TE_b) < nLoop)       TE_b       <- rep(2.    , nLoop)
 
   list(
     nSwarm = nSwarm, dSwarm = "autogen", varUpper = "autogen", varLower = "autogen", initSwarm = "autogen", 
@@ -223,7 +242,7 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
     freeRun = freeRun, tol = tol, c1 = c1, c2 = c2, w0 = w0, w1 = w1, w_var = w_var, #chi = chi,
     vk = vk,  #GC_S_ROOF = GC_S_ROOF, GC_F_ROOF = GC_F_ROOF,
     #GC_RHO = GC_RHO, 
-    Q_cen_type = Q_cen_type, Q_a0 = Q_a0, Q_a1 = Q_a1, Q_a_var = Q_a_var
-    #LcRi_L = LcRi_L,
+    Q_cen_type = Q_cen_type, Q_a0 = Q_a0, Q_a1 = Q_a1, Q_a_var = Q_a_var,
+    LcRi_L = LcRi_L, CSO_phi = CSO_phi,  TE_b = TE_b
   )
 }

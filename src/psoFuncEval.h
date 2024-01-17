@@ -1,7 +1,7 @@
 // DECLARE FUNCTIONS
 
 // BODY
-void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const mat swarm, vec &fSwarm)
+void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const arma::mat swarm, arma::vec &fSwarm)
 {	
   int nSwarm = (int)swarm.n_rows;
   double feval = 0;
@@ -23,7 +23,7 @@ void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const mat swar
   } else {*/
 		// NON-PARALLEL LOOP
 		for (int iSwarm = 0; iSwarm < nSwarm; iSwarm++) {
-			rowvec PARTICLE = arma::conv_to<rowvec>::from(swarm.row(iSwarm));
+			arma::rowvec PARTICLE = arma::conv_to<arma::rowvec>::from(swarm.row(iSwarm));
 			Shield<SEXP> PARTICLE_SEXP(Rcpp::wrap(PARTICLE));
 			//Rcpp::NumericVector PARTICLE_Rform = Rcpp::as<Rcpp::NumericVector>(PARTICLE_SEXP);
 			feval = (double) objfunc->eval(PARTICLE_SEXP);

@@ -13,8 +13,8 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
 	//int checkConv = PSO_OPTS.checkConv; 
 	double freeRun   = PSO_OPTS.freeRun; 
 	double tol       = PSO_OPTS.tol; 
-  rowvec varUpper  = PSO_OPTS.varUpper;
-  rowvec varLower  = PSO_OPTS.varLower;
+  arma::rowvec varUpper  = PSO_OPTS.varUpper;
+  arma::rowvec varLower  = PSO_OPTS.varLower;
 
 	// DECLARE VARIABLES
   arma::mat swarm(nSwarm, dSwarm), vStep(nSwarm, dSwarm), PBest(nSwarm, dSwarm);//, GrBest(nGroup, dSwarm);
@@ -35,14 +35,14 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
   double vk = PSO_OPTS.vk;
   velMax = (varUpper - varLower)/vk;
   // INITIALIZE RANDOM SWARM
-  swarm = randu(nSwarm, dSwarm) % repmat(varUpper - varLower, nSwarm, 1) + repmat(varLower, nSwarm, 1);
+  swarm = arma::randu(nSwarm, dSwarm) % repmat(varUpper - varLower, nSwarm, 1) + repmat(varLower, nSwarm, 1);
   if (hasInitSwarm > 0) {
     arma::mat initSwarm = PSO_OPTS.initSwarm;
     for (arma::uword i = 0; i < initSwarm.n_rows; i++) {
       swarm.row(i) = initSwarm.row(i);
     }
   }
-  rowvec fixedDims  = PSO_OPTS.fixedDims;
+  arma::rowvec fixedDims  = PSO_OPTS.fixedDims;
   for (int j = 0; j < dSwarm; j ++) {
     if (!std::isnan(fixedDims(j))) {
       swarm.col(j).fill(fixedDims(j));
@@ -75,14 +75,14 @@ void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
       if (t == (maxIter - 1)) Rprintf("\n"); 
     }
     // UPDATE VELOCITY
-		psoUpdateParticle(PSO_OPTS, PSO_DYN, PBest, GBest, velMax, varUpper, varLower, vStep, swarm);
+		psoUpdateParticle(PSO_OPTS, PSO_DYN, fSwarm, PBest, GBest, velMax, varUpper, varLower, vStep, swarm);
     // UPDATE SWARM POSITION
     psoCheckParticle(PSO_OPTS, PSO_DYN, varUpper, varLower, swarm);	
     // UPDATE OBJECTIVE FUNCTION VALUES
     psoFuncEval(IF_PARALLEL, objfunc, swarm, fSwarm); 
     // UPDATE THE LOCAL AND GLOBAL BEST
     if (any(fSwarm < fPBest)) {
-      uvec RowChange = find(fSwarm < fPBest);
+      arma::uvec RowChange = find(fSwarm < fPBest);
       fPBest.elem(RowChange) = fSwarm.elem(RowChange);
       PBest.rows(RowChange) = swarm.rows(RowChange);
     }
