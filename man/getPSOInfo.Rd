@@ -4,10 +4,26 @@
 \alias{getPSOInfo}
 \title{Generation function of PSO parameter settings}
 \usage{
-getPSOInfo(nSwarm = 32, maxIter = 100, psoType = "basic",
-  freeRun = 1, tol = 1e-06, c1 = 2.05, c2 = 2.05, w0 = 1.2,
-  w1 = 0.2, w_var = 0.8, vk = 4, Q_cen_type = 1, Q_a0 = 1.7,
-  Q_a1 = 0.7, Q_a_var = 0.8)
+getPSOInfo(
+  nSwarm = 32,
+  maxIter = 100,
+  psoType = "basic",
+  freeRun = 1,
+  tol = 1e-06,
+  c1 = 2.05,
+  c2 = 2.05,
+  w0 = 1.2,
+  w1 = 0.2,
+  w_var = 0.8,
+  vk = 4,
+  Q_cen_type = 1,
+  Q_a0 = 1.7,
+  Q_a1 = 0.7,
+  Q_a_var = 0.8,
+  LcRi_L = 0.01,
+  CSO_phi = 0.1,
+  TE_b = 2
+)
 }
 \arguments{
 \item{nSwarm}{A integer number of swarm size in PSO algorithm.}
@@ -18,6 +34,9 @@ getPSOInfo(nSwarm = 32, maxIter = 100, psoType = "basic",
 \itemize{
 \item{"basic"}{ Linearly Decreasing Weight PSO (Shi, Y. H.    and Eberhart, R. C., 1998)}
 \item{"quantum"}{ Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)}
+\item{"lcri"}{ LcRiPSO (Bonyadi, M. R., Michalewicz, Z., 2014)}
+\item{"comp"}{ Competitive Swarm Optimization (Cheng, R., Jin, Y. 2014)}
+\item{"dexp"}{ DExPSO (Under review)}
 }}
 
 \item{freeRun}{A number between \eqn{[0,1]} that controls the percentage of PSO iterations which are free from examining the

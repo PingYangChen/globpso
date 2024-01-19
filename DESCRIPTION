@@ -17,6 +17,5 @@ Imports:
     RcppArmadillo (>= 0.12.6.6.1),
     utils
 LinkingTo: Rcpp, RcppArmadillo,
-RoxygenNote: 6.1.0
+RoxygenNote: 7.3.0
 Suggests: knitr, rmarkdown
-

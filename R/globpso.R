@@ -187,12 +187,7 @@ getPSOInfo <- function(nSwarm = 32, maxIter = 100, psoType = "basic",
 
   stopifnot(length(nSwarm) == 1)
   if (!(psoType %in% c("basic", "quantum", "lcri", "comp", "dexp"))) {
-		stop("Currently the function supports: \n
-			psoType = 'basic' for basic PSO algorithm.\n
-			psoType = 'quantum' for quantum PSO algorithm. \n
-      psoType = 'lcri' for LcRi PSO algorithm. \n
-      psoType = 'comp' for Competitive Swarm Optimizer algorithm. \n
-		  psoType = 'dexp' for DExPSO algorithm.   
+		stop("Currently the function supports: \npsoType = 'basic' for basic PSO algorithm.\npsoType = 'quantum' for quantum PSO algorithm. \npsoType = 'lcri' for LcRi PSO algorithm. \npsoType = 'comp' for Competitive Swarm Optimizer algorithm. \npsoType = 'dexp' for DExPSO algorithm.   
 		")
 	} else {
 	  if (psoType == "basic") {

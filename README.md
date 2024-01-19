@@ -1,6 +1,15 @@
 globpso
 =======
-This package collects the powerful variants of particle swarm optimization algorithm.  Currently it supports the basic PSO algorithm and the Quantum-behaved PSO algorithm.
+
+Features
+--------
+This package collects the powerful variants of particle swarm  algorithms for R users. Currently it supports five types of PSO:
+- Particle Swarm Optimization (PSO, Eberhart and Kennedy, 1995)
+- Quantum-behaved particle Swarm Optimization (QPSO, Sun et al., 2004a,b)
+- Locally convergent rotationally invariant particle
+swarm optimization (LcRiPSO, Bonyadi and Michalewicz, 2014)
+- Competitive Swarm Optimizer (CSO, Cheng and Jin, 2015)
+- Double exponential particle swarm optimization (DExPSO, Stehlik et al., 2024+)
 
 Installation
 ------------
@@ -11,10 +20,13 @@ install.packages("devtools")
 devtools::install_github("PingYangChen/globpso")
 ```
 
-If you encounter a bug, please file a reproducible example on [github](https://github.com/PingYangChen/globpso/issues).
-
 Examples
 --------
+For setting the PSO type, please find the instruction through the command.
+``` r
+?getPSOInfo
+```
+
 ``` r
 library(globpso)
 
@@ -67,3 +79,15 @@ alg_setting <- getPSOInfo(nSwarm = 64, maxIter = 200, psoType = "quantum")
 res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, PSO_INFO = alg_setting, loc = loc_shift)
 res_c_large$history
 ```
+
+Reference
+---------
+- Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198.
+- Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization.
+IEEE transactions on cybernetics, 45(2):191-204.
+- Eberhart, R. and Kennedy, J. (1995). A new optimizer using particle swarm theory. In The 6th International Symposium on Micro Machine and Human Science, pages 39-43. IEEE.
+- Sun, J., Feng, B., and Xu, W. (2004a). Particle swarm optimization with particles having quantum behavior. In Evolutionary Computation, 2004. CEC2004. Congress on, volume 1, pages 325-331. IEEE.
+- Sun, J., Xu, W., and Feng, B. (2004b). A global search strategy of quantum-behaved particle swarm optimization. In Cybernetics and Intelligent Systems, 2004 IEEE Conference on, volume 1, pages 111-116. IEEE.
+
+
+If you encounter a bug, please file a reproducible example on [github](https://github.com/PingYangChen/globpso/issues).
