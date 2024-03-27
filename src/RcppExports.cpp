@@ -26,9 +26,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cppDE
+Rcpp::List cppDE(SEXP OBJ_FUNC, Rcpp::List DE_INFO_LIST, const SEXP env, const bool IF_PARALLEL, const bool VERBOSE);
+RcppExport SEXP _globpso_cppDE(SEXP OBJ_FUNCSEXP, SEXP DE_INFO_LISTSEXP, SEXP envSEXP, SEXP IF_PARALLELSEXP, SEXP VERBOSESEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type OBJ_FUNC(OBJ_FUNCSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type DE_INFO_LIST(DE_INFO_LISTSEXP);
+    Rcpp::traits::input_parameter< const SEXP >::type env(envSEXP);
+    Rcpp::traits::input_parameter< const bool >::type IF_PARALLEL(IF_PARALLELSEXP);
+    Rcpp::traits::input_parameter< const bool >::type VERBOSE(VERBOSESEXP);
+    rcpp_result_gen = Rcpp::wrap(cppDE(OBJ_FUNC, DE_INFO_LIST, env, IF_PARALLEL, VERBOSE));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_globpso_cppPSO", (DL_FUNC) &_globpso_cppPSO, 5},
+    {"_globpso_cppDE", (DL_FUNC) &_globpso_cppDE, 5},
     {NULL, NULL, 0}
 };
 

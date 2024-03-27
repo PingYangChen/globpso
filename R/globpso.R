@@ -133,7 +133,7 @@ globpso <- function(objFunc, lower, upper, init = NULL, fixed = NULL,
 
 #' Generation function of PSO parameter settings
 #' 
-#' Create a list with PSO parameters for optimal discrimination design search.
+#' Create a list with PSO parameters for Minimization.
 #' 
 #' @param nSwarm A integer number of swarm size in PSO algorithm.
 #' @param maxIter A integer number of maximal PSO iterations.

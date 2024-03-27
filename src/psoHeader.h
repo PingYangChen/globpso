@@ -1,78 +1,4 @@
-// Rcpp Header File
-#include <cmath>
-#include <RcppArmadillo.h>
-//#include <omp.h>
 
-//using namespace Rcpp;
-using namespace arma;
-
-#ifndef Rcpp_PSO_EVALUATE_H_
-#define Rcpp_PSO_EVALUATE_H_
-
-namespace Rcpp {
-
-  class EvalBase {
-    public:
-        EvalBase() : neval(0) {};
-        virtual double eval(SEXP x) = 0;
-        virtual ~EvalBase() {};
-        //unsigned long getNbEvals() { return neval; }
-    protected:
-        unsigned long int neval;
-  };
-
-  class EvalStandard : public EvalBase {
-    public:
-        EvalStandard(SEXP fcall_, SEXP env_) : fcall(fcall_), env(env_) {}
-        double eval(SEXP x) {
-          //neval++;
-          return defaultfun(x);
-        }
-        ~EvalStandard() {};
-    private:
-        SEXP fcall, env;
-        double defaultfun(SEXP x) {
-          //Shield<SEXP> fn(Rcpp::Rcpp_lang3(fcall, x, R_DotsSymbol));
-          Shield<SEXP> fn(::Rf_lang3(fcall, x, R_DotsSymbol));
-          Shield<SEXP> sexp_fvec(::Rf_eval(fn, env));
-          //SEXP sexp_fvec = Rcpp::Rcpp_eval(fn, env); // too slow
-          double f_result = (double)Rcpp::as<double>(sexp_fvec);
-          return f_result;
-        }
-    };
-
-  typedef double (*funcPtr)(SEXP, SEXP);
-
-  class EvalCompiled : public EvalBase {
-    public:
-        EvalCompiled(Rcpp::XPtr<funcPtr> xptr, SEXP __env) {
-          funptr = *(xptr);
-          env = __env;
-        };
-        EvalCompiled(SEXP xps, SEXP __env) {
-          Rcpp::XPtr<funcPtr> xptr(xps);
-          funptr = *(xptr);
-          env = __env;
-        };
-        double eval(SEXP x) {
-          //neval++;
-          double f_result = funptr(x, env);
-          return f_result;
-        }
-        ~EvalCompiled() {};
-    private:
-        funcPtr funptr;
-        SEXP env;
-    };
-}
-
-#endif
-
-using namespace Rcpp;
-
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::plugins(openmp)]]
 
 // DEFINE STUCTURES OF PSO INFORMATION
 typedef struct {
@@ -153,8 +79,7 @@ typedef struct {
 
 
 // DECLARE FUNCTIONS
-void matrixPrintf(const mat &m);
-void rvecPrintf(const rowvec &v);
+void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const arma::mat swarm, arma::vec &fSwarm);
 void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST);
 void PSO_MAIN(PSO_OPTIONS PSO_OPTS, Rcpp::EvalBase *objfunc,
               const bool IF_PARALLEL, const bool COUNTER_ON, PSO_Result &PSO_Result);
@@ -168,28 +93,13 @@ void psoUpdateDynPara(PSO_OPTIONS PSO_OPTS, const int iter, PSO_DYN &PSO_DYN,
 											const arma::mat swarm, const arma::mat PBest, const arma::rowvec GBest,
 											const arma::vec fSwarm, const arma::vec fPBest, const double fGBest);
 void psoFuncEval(const bool IF_PARALLEL, Rcpp::EvalBase *objfunc, const arma::mat swarm, arma::vec &fSwarm);
-#include "psoFuncEval.h"
+
 #include "psoCheckParticle.h"
 #include "psoUpdateParticle.h"
 #include "psoUpdateDynPara.h"
 #include "psoKernel.h"
 
 // BODY
-void matrixPrintf(const mat &m)
-{
-  for (uword i = 0; i < m.n_rows; i++) {
-    for (uword j = 0; j < m.n_cols; j++) Rprintf("%4.4f\t", m(i,j));
-    Rprintf("\n");
-  }
-	Rprintf("\n\n");
-}
-
-void rvecPrintf(const rowvec &v)
-{
-  for (uword i = 0; i < v.n_elem; i++) Rprintf("%4.4f\t", v(i));
-  Rprintf("\n\n");
-}
-
 
 // PSO OPTIONS
 void getAlgStruct(PSO_OPTIONS &PSO_OPTS, const Rcpp::List PSO_INFO_LIST)

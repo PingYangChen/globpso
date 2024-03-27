@@ -5,3 +5,7 @@ cppPSO <- function(OBJ_FUNC, PSO_INFO_LIST, env, IF_PARALLEL, VERBOSE) {
     .Call(`_globpso_cppPSO`, OBJ_FUNC, PSO_INFO_LIST, env, IF_PARALLEL, VERBOSE)
 }
 
+cppDE <- function(OBJ_FUNC, DE_INFO_LIST, env, IF_PARALLEL, VERBOSE) {
+    .Call(`_globpso_cppDE`, OBJ_FUNC, DE_INFO_LIST, env, IF_PARALLEL, VERBOSE)
+}
+

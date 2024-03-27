@@ -79,7 +79,7 @@ The default is \code{FALSE}.}
 A list of PSO parameter settings.
 }
 \description{
-Create a list with PSO parameters for optimal discrimination design search.
+Create a list with PSO parameters for Minimization.
 }
 \examples{
 # Get default settings with specified swarm size and maximal number of iterations.
