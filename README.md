@@ -93,7 +93,7 @@ res_c_large$history
 
 Examples of DE
 --------------
-For setting the PSO type, please find the instruction through the command.
+For setting the DE type, please find the instruction through the command.
 ``` r
 ?getDEInfo
 ```
