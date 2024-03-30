@@ -7,7 +7,7 @@
 getDEInfo(
   nPop = 32,
   maxIter = 100,
-  deType = "basic",
+  deType = "rand-1",
   freeRun = 1,
   tol = 1e-06,
   sf = 0.5,
@@ -21,8 +21,14 @@ getDEInfo(
 
 \item{deType}{string. The type of DE. This package current supports the following types:
 \itemize{
-\item{"basic"}{ Differential Eolution (Storn, R. and Price, K., 1997)}
-}}
+\item{"rand-1"}{ Mutation operation on the current position with one random direction}
+\item{"rand-2"}{ Mutation operation on the current position with two random directions}
+\item{"best-1"}{ Mutation operation on the best position with one random direction}
+\item{"best-2"}{ Mutation operation on the best position with two random directions}
+\item{"rand_to-best-1"}{ Mutation operation on the current position with direction to the best and one random direction}
+\item{"rand-to-best-2"}{ Mutation operation on the current position with direction to the best and two random directions}
+}
+The default type is `rand-1`.}
 
 \item{freeRun}{A number between \eqn{[0,1]} that controls the percentage of DE iterations which are free from examining the
 stopping criterion, \eqn{|f'-f|<\varepsilon}

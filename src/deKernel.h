@@ -72,10 +72,6 @@ void DE_MAIN(DE_OPTIONS DE_OPTS, Rcpp::EvalBase *objfunc,
     deCheckPop(DE_OPTS, DE_DYN, varUpper, varLower, newpop);	
     // UPDATE OBJECTIVE FUNCTION VALUES
     psoFuncEval(IF_PARALLEL, objfunc, newpop, fnewpop);
-    //matrixPrintf(pop);
-    //vecPrintf(fpop);
-    //matrixPrintf(newpop);
-    //vecPrintf(fnewpop);
     // UPDATE POPULATION
     if (any(fnewpop < fpop)) {
       arma::uvec RowChange = find(fnewpop < fpop);

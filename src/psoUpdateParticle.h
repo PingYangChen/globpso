@@ -16,9 +16,11 @@ void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 	
 	arma::mat velMax_Mat = repmat(velMax, nSwarm, 1);
 	arma::mat GBmat = repmat(GBest, nSwarm, 1);
+	GetRNGstate();
 	switch (typePSO) {
 		case 0: // Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)
 		{	// The most common one
+	    matrixPrintf(arma::randu(nSwarm, dSwarm));
 			vStep = PSO_DYN.w_cur*vStep + c1*arma::randu(nSwarm, dSwarm) % (PBest - swarm) + 
 																		c2*arma::randu(nSwarm, dSwarm) % (GBmat - swarm);
 			vStep = min(vStep, velMax_Mat); vStep = max(vStep, (-1)*velMax_Mat);
@@ -149,7 +151,8 @@ void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 		  swarm += vStep;
 		  break;
 		}
-	}	
+	}
+	PutRNGstate();
 }
 
 arma::mat expTail(arma::mat u, double b) 

@@ -60,7 +60,7 @@
 #' res_c$par
 #' res_c$val
 #' # Use getDEInfo() to change the DE options
-#' alg_setting <- getDEInfo(nPop = 64, maxIter = 200, deType = "basic", sf = 0.5, cr = 0.1)
+#' alg_setting <- getDEInfo(nPop = 64, maxIter = 200, deType = "rand-1", sf = 0.5, cr = 0.1)
 #' res_c_large <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, DE_INFO = alg_setting, loc = loc_shift)
 #' res_c_large$history
 #' @references Storn, R., & Price, K. (1997). Differential evolution-a simple and efficient heuristic for global optimization over continuous spaces. Journal of global optimization, 11, 341-359.
@@ -147,8 +147,14 @@ diffevo <- function(objFunc, lower, upper, init = NULL, fixed = NULL,
 #' For \code{freeRun} smaller than 1.0, the default is \code{1e-6}. Otherwise, this value would not affect the algorithm.
 #' @param deType string. The type of DE. This package current supports the following types:
 #' \itemize{
-#' \item{"basic"}{ Differential Eolution (Storn, R. and Price, K., 1997)}
+#' \item{"rand-1"}{ Mutation operation on the current position with one random direction}
+#' \item{"rand-2"}{ Mutation operation on the current position with two random directions}
+#' \item{"best-1"}{ Mutation operation on the best position with one random direction}
+#' \item{"best-2"}{ Mutation operation on the best position with two random directions}
+#' \item{"rand_to-best-1"}{ Mutation operation on the current position with direction to the best and one random direction}
+#' \item{"rand-to-best-2"}{ Mutation operation on the current position with direction to the best and two random directions}
 #' }
+#' The default type is `rand-1`.
 #' @param sf The value of scaling factor in DE updating procedure. The default is 0.5.
 #' @param cr The value of crossover rate in DE updating procedure. The default is 0.1.
 #' @return A list of DE parameter settings.
@@ -158,18 +164,38 @@ diffevo <- function(objFunc, lower, upper, init = NULL, fixed = NULL,
 #' @name getDEInfo
 #' @rdname getDEInfo
 #' @export
-getDEInfo <- function(nPop = 32, maxIter = 100, deType = "basic",
+getDEInfo <- function(nPop = 32, maxIter = 100, deType = "rand-1",
                       #dPop = NULL, varUpper = NULL, varLower = NULL, checkConv = 0,
                       freeRun = 1.0, tol = 1e-6, sf = 0.5, cr = 0.1
 ) {
   
   stopifnot(length(nPop) == 1)
-  if (!(deType %in% c("basic"))) {
-    stop("Currently the function supports: \ndeType = 'basic' for basic DE algorithm.   
+  if (!(deType %in% c("rand-1", "rand-2", "best-1", "best-2", "rand-to-best-1", "rand-to-best-2"))) {
+    stop("Currently the function supports: \ndeType = 'rand-1' for DE/rand/1 algorithm.\ndeType = 'rand-2' for DE/rand/2 algorithm.\ndeType = 'best-1' for DE/best/1 algorithm.\ndeType = 'best-2' for DE/best/2 algorithm.\ndeType = 'rand-to-best-1' for DE/rand-to-best/1 algorithm.\ndeType = 'rand-to-best-2' for DE/rand-to-best/2 algorithm.
 		")
   } else {
-    if (deType == "basic") {
+    if (deType == "rand-1") {
       typeDE <- 0
+      if (nPop < 4) { stop("population size must > 4 for DE/rand/1 algorithm.") }
+    } else if (deType == "rand-2") {
+      typeDE <- 1
+      if (nPop < 6) { stop("population size must > 6 for DE/rand/2 algorithm.") }
+    } 
+    else if (deType == "best-1") {
+      typeDE <- 2
+      if (nPop < 3) { stop("population size must > 5 for DE/best/1 algorithm.") }
+    } 
+    else if (deType == "best-2") {
+      typeDE <- 3
+      if (nPop < 5) { stop("population size must > 5 for DE/best/2 algorithm.") }
+    } 
+    else if (deType == "rand-to-best-1") {
+      typeDE <- 4
+      if (nPop < 3) { stop("population size must > 3 for DE/rand-to-best/1 algorithm.") }
+    } 
+    else if (deType == "rand-to-best-2") {
+      typeDE <- 5
+      if (nPop < 5) { stop("population size must > 5 for DE/rand-to-best/2 algorithm.") }
     } 
   }
   

@@ -41,7 +41,7 @@ Rcpp::List cppPSO(SEXP OBJ_FUNC, Rcpp::List PSO_INFO_LIST, const SEXP env, const
 //[[Rcpp::export]]
 Rcpp::List cppDE(SEXP OBJ_FUNC, Rcpp::List DE_INFO_LIST, const SEXP env, const bool IF_PARALLEL, const bool VERBOSE)
 {
-  //arma_rng::set_seed_random();
+  // arma_rng::set_seed_random();
   /*int NCPU = omp_get_max_threads();
    if (NCPU < 3) NCPU = 2;
    omp_set_num_threads(NCPU - 1);*/
@@ -56,7 +56,7 @@ Rcpp::List cppDE(SEXP OBJ_FUNC, Rcpp::List DE_INFO_LIST, const SEXP env, const b
   }
   
   DE_OPTIONS DE_OPT; getParamDE(DE_OPT, DE_INFO_LIST);
-  
+
   DE_Result Result;
   if (VERBOSE) Rprintf("\nCalling Cpp DE Kernel... ");
   DE_MAIN(DE_OPT, objfunc, IF_PARALLEL, VERBOSE, Result);

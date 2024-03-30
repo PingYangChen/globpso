@@ -90,7 +90,7 @@ res_c <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = l
 res_c$par
 res_c$val
 # Use getDEInfo() to change the DE options
-alg_setting <- getDEInfo(nPop = 64, maxIter = 200, deType = "basic", sf = 0.5, cr = 0.1)
+alg_setting <- getDEInfo(nPop = 64, maxIter = 200, deType = "rand-1", sf = 0.5, cr = 0.1)
 res_c_large <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, DE_INFO = alg_setting, loc = loc_shift)
 res_c_large$history
 }
