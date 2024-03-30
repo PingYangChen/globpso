@@ -116,7 +116,7 @@ low_bound <- rep(-5, 3)
 loc_shift <- 1
 
 # Use getDEInfo() to setup the DE options
-de_setting <- getDEInfo(nPop = 8, maxIter = 100, deType = "best-2", sf = 0.5, cr = 0.1)
+de_setting <- getDEInfo(nPop = 64, maxIter = 200, deType = "best-2", sf = 0.5, cr = 0.1)
 
 # Run DE for this optimization problem
 # Also input the enviorment variable, the location shift 'loc_shift'
