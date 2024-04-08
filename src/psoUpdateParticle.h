@@ -20,7 +20,6 @@ void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 	switch (typePSO) {
 		case 0: // Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)
 		{	// The most common one
-	    matrixPrintf(arma::randu(nSwarm, dSwarm));
 			vStep = PSO_DYN.w_cur*vStep + c1*arma::randu(nSwarm, dSwarm) % (PBest - swarm) + 
 																		c2*arma::randu(nSwarm, dSwarm) % (GBmat - swarm);
 			vStep = min(vStep, velMax_Mat); vStep = max(vStep, (-1)*velMax_Mat);
