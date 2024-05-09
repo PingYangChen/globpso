@@ -150,6 +150,54 @@ void psoUpdateParticle(PSO_OPTIONS PSO_OPTS, const PSO_DYN PSO_DYN,
 		  swarm += vStep;
 		  break;
 		}
+	  case 20241: // DExQPSO
+		{
+		  double TE_b = PSO_OPTS.TE_b;
+		  arma::mat R1 = expTail(arma::randu(nSwarm, dSwarm), TE_b); 
+		  arma::mat R2 = expTail(arma::randu(nSwarm, dSwarm), TE_b);
+		  arma::mat PHI = (c1*R1)/(c1*R1 + c2*R2);
+		  arma::mat PM = PHI % PBest + (1.0 - PHI) % GBmat;
+		  arma::mat QuantumMove;
+		  if (PSO_OPTS.Q_cen_type == 0) {
+		    QuantumMove = PSO_DYN.Q_a_cur*arma::abs(PM - swarm) % arma::log(1/arma::randu(nSwarm, dSwarm));
+		  } else {
+		    arma::mat MBest = repmat(arma::sum(PBest, 0)/((double)nSwarm), nSwarm, 1);
+		    QuantumMove = PSO_DYN.Q_a_cur*arma::abs(MBest - swarm) % arma::log(1/arma::randu(nSwarm, dSwarm));
+		  }
+		  arma::mat DICE = arma::randu(nSwarm, dSwarm);
+		  swarm = PM;
+		  swarm.elem(find(DICE > 0.5)) += QuantumMove.elem(find(DICE > 0.5));
+		  swarm.elem(find(DICE <= 0.5)) -= QuantumMove.elem(find(DICE <= 0.5));       
+		  break;
+		}
+	  case 20242: // DExCSO
+		{
+		  double TE_b = PSO_OPTS.TE_b;
+		  arma::rowvec GMean = arma::sum(swarm, 0)/((double)nSwarm);
+		  arma::uvec COUPLE_ID = arma::repmat(arma::linspace<arma::uvec>(0, nSwarm/2 - 1, nSwarm/2), 2, 1);
+		  arma::vec RANDNUM = arma::randu(nSwarm, 1);
+		  arma::uvec RANDIDX = sort_index(RANDNUM);
+		  COUPLE_ID = COUPLE_ID(RANDIDX);
+		  arma::uword WINNER, LOSER;
+		  for (arma::uword i = 0; i < ((arma::uword)nSwarm/2); i++) {
+		    arma::uvec COMPPAIR = find(COUPLE_ID == i);
+		    if (fSwarm(COMPPAIR(0)) < fSwarm(COMPPAIR(1))) {
+		      WINNER = COMPPAIR(0); LOSER = COMPPAIR(1);
+		    } else {
+		      WINNER = COMPPAIR(1); LOSER = COMPPAIR(0);
+		    }
+		    arma::mat R1 = expTail(arma::randu(1, dSwarm), TE_b);
+		    arma::mat R2 = expTail(arma::randu(1, dSwarm), TE_b);
+		    arma::mat R3 = expTail(arma::randu(1, dSwarm), TE_b);
+		    vStep.row(LOSER) = R1 % vStep.row(LOSER) + 
+		      R2 % (swarm.row(WINNER) - swarm.row(LOSER)) + 
+		      PSO_OPTS.CSO_phi*(R3 % (GMean - swarm.row(LOSER)));
+		    vStep.row(LOSER) = min(vStep.row(LOSER), velMax); 
+		    vStep.row(LOSER) = max(vStep.row(LOSER), (-1)*velMax);
+		    swarm.row(LOSER) += vStep.row(LOSER);
+		  }
+		  break;
+		}	    
 	}
 	PutRNGstate();
 }
