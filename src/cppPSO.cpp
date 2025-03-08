@@ -4,7 +4,7 @@
 #include "deHeader.h"
 #include "psoFuncEval.h"
 
-// RCPP FUNCTIONS
+// RCPP FUNCTIONSt
 //[[Rcpp::export]]
 Rcpp::List cppPSO(SEXP OBJ_FUNC, Rcpp::List PSO_INFO_LIST, const SEXP env, const bool IF_PARALLEL, const bool VERBOSE)
 {

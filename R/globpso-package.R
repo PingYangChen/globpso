@@ -14,6 +14,9 @@
 #' @docType package
 #' @author Ping-Yang Chen <pychen.ping@gmail.com>
 #' @name globpso-package
-#' @useDynLib globpso
-#' @importFrom Rcpp evalCpp RcppArmadillo cppFunction sourceCpp
+#' @useDynLib globpso, .registration=TRUE
+#' @import Rcpp 
+#' @import RcppArmadillo
+#' @importFrom Rcpp evalCpp cppFunction sourceCpp
 #' @importFrom utils globalVariables
+"_PACKAGE"

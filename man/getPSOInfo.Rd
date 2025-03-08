@@ -70,10 +70,11 @@ from \code{w0} to \code{w1}. The default is 0.8.}
 \item{Q_a_var}{A number between \eqn{[0,1]} that controls the percentage of iterations that QPSO linearly decreases the CE coefficient
 from \code{Q_a0} to \code{Q_a1}. The default is 0.8.}
 
-\item{checkConv}{A logical value which controls whether PSO checks the stopping criterion during updating procedure.
-Specify \code{TRUE} for PSO to compute the stopping criterion \eqn{|f'-f|<\varepsilon}
-where \eqn{f'} and \eqn{f} are the objective function values in the previous and current iterations, respectively.
-The default is \code{FALSE}.}
+\item{LcRi_L}{The value of random number generator based on normal density social parameter in LcRiPSO updating procedure. The default is 0.01. (for \code{psoType = c("lcri")} only)}
+
+\item{CSO_phi}{The value of social parameter in CSO updating procedure. The default is 0.1. (for \code{psoType = c("comp", "cdexp")} only)}
+
+\item{TE_b}{The value of random number generator based on double-exponential density. The default is 2.0. (for \code{psoType = c("dexp", "qdexp", "cdexp")} only).}
 }
 \value{
 A list of PSO parameter settings.

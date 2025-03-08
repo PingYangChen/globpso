@@ -42,11 +42,6 @@ For \code{freeRun} smaller than 1.0, the default is \code{1e-6}. Otherwise, this
 \item{sf}{The value of scaling factor in DE updating procedure. The default is 0.5.}
 
 \item{cr}{The value of crossover rate in DE updating procedure. The default is 0.1.}
-
-\item{checkConv}{A logical value which controls whether DE checks the stopping criterion during updating procedure.
-Specify \code{TRUE} for DE to compute the stopping criterion \eqn{|f'-f|<\varepsilon}
-where \eqn{f'} and \eqn{f} are the objective function values in the previous and current iterations, respectively.
-The default is \code{FALSE}.}
 }
 \value{
 A list of DE parameter settings.

@@ -13,7 +13,6 @@ globpso(
   PSO_INFO = NULL,
   seed = NULL,
   verbose = TRUE,
-  environment,
   ...
 )
 }
@@ -40,6 +39,8 @@ for the NA-valued components.}
 \item{seed}{The random seed that controls initial swarm of PSO. The default is \code{NULL}.}
 
 \item{verbose}{The logical value controls if PSO would reports the updating progress. The default is \code{TRUE}.}
+
+\item{...}{Further arguments to be passed to \code{objFunc}.}
 }
 \value{
 An List.
@@ -91,7 +92,8 @@ res_c$par
 res_c$val
 # Use getPSOInfo() to change the PSO options
 alg_setting <- getPSOInfo(nSwarm = 64, maxIter = 200, psoType = "quantum")
-res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, PSO_INFO = alg_setting, loc = loc_shift)
+res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
+                       PSO_INFO = alg_setting, loc = loc_shift)
 res_c_large$history
 }
 \references{

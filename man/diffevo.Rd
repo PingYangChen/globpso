@@ -13,7 +13,6 @@ diffevo(
   DE_INFO = NULL,
   seed = NULL,
   verbose = TRUE,
-  environment,
   ...
 )
 }
@@ -40,6 +39,8 @@ for the NA-valued components.}
 \item{seed}{The random seed that controls initial population of DE. The default is \code{NULL}.}
 
 \item{verbose}{The logical value controls if DE would reports the updating progress. The default is \code{TRUE}.}
+
+\item{...}{Further arguments to be passed to \code{objFunc}.}
 }
 \value{
 An List.
@@ -91,7 +92,8 @@ res_c$par
 res_c$val
 # Use getDEInfo() to change the DE options
 alg_setting <- getDEInfo(nPop = 64, maxIter = 200, deType = "rand-1", sf = 0.5, cr = 0.1)
-res_c_large <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, DE_INFO = alg_setting, loc = loc_shift)
+res_c_large <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
+                       DE_INFO = alg_setting, loc = loc_shift)
 res_c_large$history
 }
 \references{
