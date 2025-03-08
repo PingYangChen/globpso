@@ -20,7 +20,7 @@ getDEInfo(
 \item{maxIter}{A integer number of maximal DE iterations.}
 
 \item{deType}{string. The type of DE. This package current supports the following types:
-\itemize{
+\describe{
 \item{"rand-1"}{ Mutation operation on the current position with one random direction}
 \item{"rand-2"}{ Mutation operation on the current position with two random directions}
 \item{"best-1"}{ Mutation operation on the best position with one random direction}

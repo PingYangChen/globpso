@@ -44,7 +44,7 @@ for the NA-valued components.}
 }
 \value{
 An List.
-\itemize{
+\describe{
 \item{par}{ the global best particle.}
 \item{val}{ the objective function value of the global best particle.}
 \item{history}{ a vector of objective function values of the global best particle in DE search history.}

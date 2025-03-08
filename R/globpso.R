@@ -19,7 +19,7 @@
 #' @param verbose The logical value controls if PSO would reports the updating progress. The default is \code{TRUE}.
 #' @param ... Further arguments to be passed to \code{objFunc}.
 #' @return An List.
-#' \itemize{
+#' \describe{
 #' \item{par}{ the global best particle.}
 #' \item{val}{ the objective function value of the global best particle.}
 #' \item{history}{ a vector of objective function values of the global best particle in PSO search history.}
@@ -153,7 +153,7 @@ globpso <- function(objFunc, lower, upper, init = NULL, fixed = NULL,
 #' @param tol A small value for the tolerance, \eqn{\varepsilon}, in the stopping criterion.
 #' For \code{freeRun} smaller than 1.0, the default is \code{1e-6}. Otherwise, this value would not affect the algorithm.
 #' @param psoType string. The type of PSO. This package current supports the following types:
-#' \itemize{
+#' \describe{
 #' \item{"basic"}{ Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)}
 # \item{1}{ GCPSO (van den Bergh, F. and	Engelbrecht, A. P., 2002)}
 #' \item{"quantum"}{ Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)}

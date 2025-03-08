@@ -31,7 +31,7 @@ getPSOInfo(
 \item{maxIter}{A integer number of maximal PSO iterations.}
 
 \item{psoType}{string. The type of PSO. This package current supports the following types:
-\itemize{
+\describe{
 \item{"basic"}{ Linearly Decreasing Weight PSO (Shi, Y. H.    and Eberhart, R. C., 1998)}
 \item{"quantum"}{ Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)}
 \item{"lcri"}{ LcRiPSO (Bonyadi, M. R., Michalewicz, Z., 2014)}

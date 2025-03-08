@@ -19,7 +19,7 @@
 #' @param verbose The logical value controls if DE would reports the updating progress. The default is \code{TRUE}.
 #' @param ... Further arguments to be passed to \code{objFunc}.
 #' @return An List.
-#' \itemize{
+#' \describe{
 #' \item{par}{ the global best particle.}
 #' \item{val}{ the objective function value of the global best particle.}
 #' \item{history}{ a vector of objective function values of the global best particle in DE search history.}
@@ -150,7 +150,7 @@ diffevo <- function(objFunc, lower, upper, init = NULL, fixed = NULL,
 #' @param tol A small value for the tolerance, \eqn{\varepsilon}, in the stopping criterion.
 #' For \code{freeRun} smaller than 1.0, the default is \code{1e-6}. Otherwise, this value would not affect the algorithm.
 #' @param deType string. The type of DE. This package current supports the following types:
-#' \itemize{
+#' \describe{
 #' \item{"rand-1"}{ Mutation operation on the current position with one random direction}
 #' \item{"rand-2"}{ Mutation operation on the current position with two random directions}
 #' \item{"best-1"}{ Mutation operation on the best position with one random direction}
