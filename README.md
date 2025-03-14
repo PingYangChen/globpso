@@ -132,9 +132,9 @@ res$val
 Reference
 ---------
 - Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198.
-- Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization.
-IEEE transactions on cybernetics, 45(2):191-204.
+- Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2):191-204.
 - Eberhart, R. and Kennedy, J. (1995). A new optimizer using particle swarm theory. In The 6th International Symposium on Micro Machine and Human Science, pages 39-43. IEEE.
+- Stehlík, M., Chen, P. Y., Wong, W. K., and Kiseľák, J. (2024). A double exponential particle swarm optimization with non-uniform variates as stochastic tuning and guaranteed convergence to a global optimum with sample applications to finding optimal exact designs in biostatistics. Applied Soft Computing, 163, 111913.
 - Storn, R., & Price, K. (1997). Differential evolution-a simple and efficient heuristic for global optimization over continuous spaces. Journal of global optimization, 11, 341-359.
 - Sun, J., Feng, B., and Xu, W. (2004a). Particle swarm optimization with particles having quantum behavior. In Evolutionary Computation, 2004. CEC2004. Congress on, volume 1, pages 325-331. IEEE.
 - Sun, J., Xu, W., and Feng, B. (2004b). A global search strategy of quantum-behaved particle swarm optimization. In Cybernetics and Intelligent Systems, 2004 IEEE Conference on, volume 1, pages 111-116. IEEE.
