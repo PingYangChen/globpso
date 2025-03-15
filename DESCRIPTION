@@ -20,9 +20,24 @@ Authors@R: c(
   person("Rainer", "Storn", email = "", role = c("ctb")),
   person("Kenneth", "Price", email = "", role = c("ctb")),
   person("Okazaki", "Naoaki", email = "", role = c("cph")))
-Author: Ping-Yang Chen [aut, cre], Naoaki Okazaki [cph]
+Author: Ping-Yang Chen [aut, cre], 
+        Russell Eberhart [ctb], 
+        Kennedy Kennedy [ctb], 
+        Jun Sun [ctb], 
+        Bin Feng [ctb], 
+        Wenbo Xu [ctb], 
+        Mohammad Reza Bonyadi [ctb], 
+        Zbigniew Michalewicz [ctb], 
+        Ran Cheng [ctb], 
+        Yaochu Jin [ctb], 
+        Milan Stehlík [ctb], 
+        Weng Kee Wong [ctb], 
+        Jozef Kiseľák [ctb], 
+        Rainer Storn [ctb], 
+        Kenneth Price [ctb], 
+        Okazaki Naoaki [cph]
 Maintainer: Ping-Yang Chen <pychen.ping@gmail.com>
-Description: This package provides implementations of Particle Swarm Optimization (PSO) and Differential Evolution (DE) for solving global minimization problems. It is designed to handle complex optimization tasks with nonlinear, non-differentiable, and multi-modal objective functions. There are five types of PSO variants: Particle Swarm Optimization (PSO, Eberhart and Kennedy, 1995) <doi:10.1109/MHS.1995.494215>, Quantum-behaved particle Swarm Optimization (QPSO, Sun et al., 2004) <doi:10.1109/CEC.2004.1330875>, Locally convergent rotationally invariant particle swarm optimization (LcRiPSO, Bonyadi and Michalewicz, 2014) <doi:10.1007/s11721-014-0095-1>, Competitive Swarm Optimizer (CSO, Cheng and Jin, 2015) <doi:10.1109/TCYB.2014.2322602> and Double exponential particle swarm optimization (DExPSO, Stehlik et al., 2024) <doi:10.1016/j.asoc.2024.111913>. For DE algorithm, there are six types (Storn, R. and Price, K., 1997) <doi:10.1023/A:1008202821328>: DE/rand/1, DE/rand/2, DE/best/1, DE/best/2, DE/rand_to-best/1 and DE/rand_to-best/2.
+Description: A fast and flexible general-purpose implementation of Particle Swarm Optimization (PSO) and Differential Evolution (DE) for solving global minimization problems is provided. It is designed to handle complex optimization tasks with nonlinear, non-differentiable, and multi-modal objective functions defined by users. There are five types of PSO variants: Particle Swarm Optimization (PSO, Eberhart & Kennedy, 1995) <doi:10.1109/MHS.1995.494215>, Quantum-behaved particle Swarm Optimization (QPSO, Sun et al., 2004) <doi:10.1109/CEC.2004.1330875>, Locally convergent rotationally invariant particle swarm optimization (LcRiPSO, Bonyadi & Michalewicz, 2014) <doi:10.1007/s11721-014-0095-1>, Competitive Swarm Optimizer (CSO, Cheng & Jin, 2015) <doi:10.1109/TCYB.2014.2322602> and Double exponential particle swarm optimization (DExPSO, Stehlik et al., 2024) <doi:10.1016/j.asoc.2024.111913>. For the DE algorithm, six types in Storn, R. & Price, K. (1997) <doi:10.1023/A:1008202821328> are included: DE/rand/1, DE/rand/2, DE/best/1, DE/best/2, DE/rand_to-best/1 and DE/rand_to-best/2.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

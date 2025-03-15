@@ -1,6 +1,6 @@
 #' Differential Evolution Algorithms for Minimization Problems
 #'
-#' Differential Evolution Algorithms for Minimization Problems
+#' The general-purpose implementation of differential evolution algorithms for minimizing an user-defined objective function.
 #'
 #' @param objFunc The R or Rcpp compiled objective function. See the example.
 #' @param lower The vector of finite lower bounds of the search domain.
@@ -25,8 +25,8 @@
 #' \item{history}{ a vector of objective function values of the global best particle in DE search history.}
 #' \item{cputime}{ the computational time in seconds.}
 #' }
-#' @details
-#' TBD
+# @details
+# TBD
 #' @examples
 #' library(globpso)
 #' # Optimize the 3-dimensional quadratic objective function with location shift
@@ -40,31 +40,34 @@
 #' low_bound <- rep(-5, 3)
 #' # Define the location shift to be 1
 #' loc_shift <- 1
+#' # Use getDEInfo() to change the DE options
+#' alg_setting <- getDEInfo(nPop = 32, maxIter = 100, deType = "rand-1", sf = 0.5, cr = 0.1)
 #' # Run DE for this optimization problem
-#' # Also input the enviorment variable, the location shift 'loc_shift'
+#' # Also input the environment variable, the location shift 'loc_shift'
 #' res <- diffevo(objFunc = objf, lower = low_bound, upper = upp_bound, loc = loc_shift)
 #' res$par
 #' res$val
-#' # One can also write C++ objective function to further accelerate the computation
-#' library(Rcpp)
-#' library(RcppArmadillo)
-#' objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
-#'     double val = 0;
-#'     double loc_c = (double)Rcpp::as<double>(loc);
-#'     arma::rowvec x_c = (arma::rowvec)Rcpp::as<arma::rowvec>(x);
-#'     for (arma::uword i = 0; i < x_c.n_elem; i++) {
-#'       val += (x_c(i) - loc_c)*(x_c(i) - loc_c);
-#'     }
-#'     return val;
-#'   }', depends = "RcppArmadillo")
-#' res_c <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = loc_shift)
-#' res_c$par
-#' res_c$val
-#' # Use getDEInfo() to change the DE options
-#' alg_setting <- getDEInfo(nPop = 64, maxIter = 200, deType = "rand-1", sf = 0.5, cr = 0.1)
-#' res_c_large <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
-#'                        DE_INFO = alg_setting, loc = loc_shift)
-#' res_c_large$history
+#' ### One can also write C++ objective function to further accelerate the computation
+#' ### NOT RUN
+#' #library(Rcpp)
+#' #library(RcppArmadillo)
+#' #objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
+#' #    double val = 0;
+#' #    double loc_c = (double)Rcpp::as<double>(loc);
+#' #   arma::rowvec x_c = (arma::rowvec)Rcpp::as<arma::rowvec>(x);
+#' #   for (arma::uword i = 0; i < x_c.n_elem; i++) {
+#' #     val += (x_c(i) - loc_c)*(x_c(i) - loc_c);
+#' #   }
+#' #    return val;
+#' # }', depends = "RcppArmadillo")
+#' #res_c <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = loc_shift)
+#' #res_c$par
+#' #res_c$val
+#' ### Use getDEInfo() to change the DE options
+#' #alg_setting <- getDEInfo(nPop = 32, maxIter = 100, deType = "rand-1", sf = 0.5, cr = 0.1)
+#' #res_c_large <- diffevo(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
+#' #                       DE_INFO = alg_setting, loc = loc_shift)
+#' #res_c_large$history
 #' @references Storn, R., & Price, K. (1997). Differential evolution-a simple and efficient heuristic for global optimization over continuous spaces. Journal of global optimization, 11, 341-359.
 #' @name diffevo
 #' @rdname diffevo

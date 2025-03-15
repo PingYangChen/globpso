@@ -1,6 +1,6 @@
 #' Particle Swarm Optimization Algorithms for Minimization Problems
 #'
-#' Particle Swarm Optimization Algorithms for Minimization Problems
+#' The general-purpose implementation of particle swarm Optimization algorithms for minimizing an user-defined objective function.
 #'
 #' @param objFunc The R or Rcpp compiled objective function. See the example.
 #' @param lower The vector of finite lower bounds of the search domain.
@@ -25,8 +25,8 @@
 #' \item{history}{ a vector of objective function values of the global best particle in PSO search history.}
 #' \item{cputime}{ the computational time in seconds.}
 #' }
-#' @details
-#' TBD
+# @details
+# TBD
 #' @examples
 #' library(globpso)
 #' # Optimize the 3-dimensional quadratic objective function with location shift
@@ -40,35 +40,44 @@
 #' low_bound <- rep(-5, 3)
 #' # Define the location shift to be 1
 #' loc_shift <- 1
+#' # Use getPSOInfo() to change the PSO options
+#' alg_setting <- getPSOInfo(nSwarm = 32, maxIter = 100, psoType = "basic")
 #' # Run PSO for this optimization problem
-#' # Also input the enviorment variable, the location shift 'loc_shift'
-#' res <- globpso(objFunc = objf, lower = low_bound, upper = upp_bound, loc = loc_shift)
+#' # Also input the environment variable, the location shift 'loc_shift'
+#' res <- globpso(objFunc = objf, lower = low_bound, upper = upp_bound, 
+#'                PSO_INFO = alg_setting, loc = loc_shift)
 #' res$par
 #' res$val
-#' # One can also write C++ objective function to further accelerate the computation
-#' library(Rcpp)
-#' library(RcppArmadillo)
-#' objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
-#'     double val = 0;
-#'     double loc_c = (double)Rcpp::as<double>(loc);
-#'     arma::rowvec x_c = (arma::rowvec)Rcpp::as<arma::rowvec>(x);
-#'     for (arma::uword i = 0; i < x_c.n_elem; i++) {
-#'       val += (x_c(i) - loc_c)*(x_c(i) - loc_c);
-#'     }
-#'     return val;
-#'   }', depends = "RcppArmadillo")
-#' res_c <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = loc_shift)
-#' res_c$par
-#' res_c$val
-#' # Use getPSOInfo() to change the PSO options
-#' alg_setting <- getPSOInfo(nSwarm = 64, maxIter = 200, psoType = "quantum")
-#' res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
-#'                        PSO_INFO = alg_setting, loc = loc_shift)
-#' res_c_large$history
-# @references Bonyadi, M. R. and Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm Intelligence, 8(3):159-198. 
-# @references Cheng, R. and Jin, Y. (2015). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2):191-204.
-#' @references Shi, Y., & Eberhart, R. (1998, May). A modified particle swarm optimizer. In Evolutionary Computation Proceedings, 1998. IEEE World Congress on Computational Intelligence., The 1998 IEEE International Conference on (pp. 69-73). IEEE.
-#' @references Sun, J., Wu, X., Palade, V., Fang, W., Lai, C.-H., and Xu, W. (2012). Convergence analysis and improvements of quantum-behaved particle swarm optimization. Information Sciences, 193:81-103.
+#' ### One can also write C++ objective function to further accelerate the computation
+#' ### NOT RUN
+#' #library(Rcpp)
+#' #library(RcppArmadillo)
+#' #objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
+#' #    double val = 0;
+#' #    double loc_c = (double)Rcpp::as<double>(loc);
+#' #    arma::rowvec x_c = (arma::rowvec)Rcpp::as<arma::rowvec>(x);
+#' #    for (arma::uword i = 0; i < x_c.n_elem; i++) {
+#' #      val += (x_c(i) - loc_c)*(x_c(i) - loc_c);
+#' #    }
+#' #    return val;
+#' #  }', depends = "RcppArmadillo")
+#' #res_c <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = loc_shift)
+#' #res_c$par
+#' #res_c$val
+#' ### Use getPSOInfo() to change the PSO options
+#' #alg_setting <- getPSOInfo(nSwarm = 32, maxIter = 100, psoType = "quantum")
+#' #res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
+#' #                       PSO_INFO = alg_setting, loc = loc_shift)
+#' #res_c_large$history
+#' @references 
+#' \enumerate{
+#'   \item Bonyadi, M. R., & Michalewicz, Z. (2014). A locally convergent rotationally invariant particle swarm optimization algorithm. Swarm intelligence, 8(3), 159-198.
+#'   \item Cheng, R., & Jin, Y. (2014). A competitive swarm optimizer for large scale optimization. IEEE transactions on cybernetics, 45(2), 191-204.
+#   \item Eberhart, R. & Kennedy, J. (1995). A new optimizer using particle swarm theory. In The 6th International Symposium on Micro Machine and Human Science, pages 39-43. IEEE.
+#'   \item Shi, Y., & Eberhart, R. (1998, May). A modified particle swarm optimizer. In Evolutionary Computation Proceedings, 1998. IEEE World Congress on Computational Intelligence., The 1998 IEEE International Conference on (pp. 69-73). IEEE.
+#'   \item Stehlík, M., Chen, P. Y., Wong, W. K., and Kiseľák, J. (2024). A double exponential particle swarm optimization with non-uniform variates as stochastic tuning and guaranteed convergence to a global optimum with sample applications to finding optimal exact designs in biostatistics. Applied Soft Computing, 163, 111913.
+#'   \item Sun, J., Feng, B., and Xu, W. (2004a). Particle swarm optimization with particles having quantum behavior. In Evolutionary Computation, 2004. CEC2004. Congress on, volume 1, pages 325-331. IEEE.
+#' }
 #' @name globpso
 #' @rdname globpso
 #' @importFrom methods hasArg
@@ -154,12 +163,12 @@ globpso <- function(objFunc, lower, upper, init = NULL, fixed = NULL,
 #' For \code{freeRun} smaller than 1.0, the default is \code{1e-6}. Otherwise, this value would not affect the algorithm.
 #' @param psoType string. The type of PSO. This package current supports the following types:
 #' \describe{
-#' \item{"basic"}{ Linearly Decreasing Weight PSO (Shi, Y. H.	and Eberhart, R. C., 1998)}
-# \item{1}{ GCPSO (van den Bergh, F. and	Engelbrecht, A. P., 2002)}
-#' \item{"quantum"}{ Quantum PSO (Sun, J., Feng, B. and Xu, W., 2004)}
-#' \item{"lcri"}{ LcRiPSO (Bonyadi, M. R., Michalewicz, Z., 2014)}
-#' \item{"comp"}{ Competitive Swarm Optimization (Cheng, R., Jin, Y. 2014)}
-#' \item{"dexp"}{ DExPSO (Under review)}
+#' \item{"basic"}{ Linearly Decreasing Weight PSO (Eberhart & Kennedy, 1995)}
+# \item{1}{ GCPSO (van den Bergh, F. &	Engelbrecht, A. P., 2002)}
+#' \item{"quantum"}{ Quantum PSO (Sun et al., 2004)}
+#' \item{"lcri"}{ LcRiPSO (Bonyadi & Michalewicz, 2014)}
+#' \item{"comp"}{ Competitive Swarm Optimization (Cheng & Jin, 2014)}
+#' \item{"dexp"}{ DExPSO (Stehlík et al., 2024)}
 #' }
 #' @param c1 The value of cognitive parameter in PSO updating procedure. The default is 2.05.
 #' @param c2 The value of social parameter in PSO updating procedure. The default is 2.05.
