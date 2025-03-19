@@ -1,6 +1,6 @@
 Package: globpso
 Type: Package
-Title: Particle Swarm Optimization Algorithms and Differential Evolution for Minimization Problems
+Title: Swarm Intelligence Optimization
 Version: 1.3.0
 Date: 2025-03-08
 Authors@R: c(

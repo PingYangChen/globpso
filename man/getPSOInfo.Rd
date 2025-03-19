@@ -83,6 +83,5 @@ A list of PSO parameter settings.
 Create a list with PSO parameters for Minimization.
 }
 \examples{
-# Get default settings with specified swarm size and maximal number of iterations.
 PSO_INFO <- getPSOInfo(nSwarm = 32, maxIter = 100)
 }

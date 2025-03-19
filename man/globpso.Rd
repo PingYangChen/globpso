@@ -55,47 +55,45 @@ An List.
 The general-purpose implementation of particle swarm Optimization algorithms for minimizing an user-defined objective function.
 }
 \examples{
-library(globpso)
-# Optimize the 3-dimensional quadratic objective function with location shift
+# three-dimensional function
 objf <- function(x, loc) {
   val <- 0
-  for (i in 1:length(x)) val <- val + (x[i] - loc)^2
+  for (i in 1:length(x)) {
+    val <- val + (x[i] - loc)^2
+  }
   return(val)
 }
-# The search domain is [-5, 5]^3
+
 upp_bound <- rep(5, 3)
 low_bound <- rep(-5, 3)
-# Define the location shift to be 1
 loc_shift <- 1
-# Use getPSOInfo() to change the PSO options
+
 alg_setting <- getPSOInfo(nSwarm = 32, maxIter = 100, psoType = "basic")
-# Run PSO for this optimization problem
-# Also input the environment variable, the location shift 'loc_shift'
 res <- globpso(objFunc = objf, lower = low_bound, upper = upp_bound, 
                PSO_INFO = alg_setting, loc = loc_shift)
 res$par
 res$val
-### One can also write C++ objective function to further accelerate the computation
-### NOT RUN
-#library(Rcpp)
-#library(RcppArmadillo)
-#objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
-#    double val = 0;
-#    double loc_c = (double)Rcpp::as<double>(loc);
-#    arma::rowvec x_c = (arma::rowvec)Rcpp::as<arma::rowvec>(x);
-#    for (arma::uword i = 0; i < x_c.n_elem; i++) {
-#      val += (x_c(i) - loc_c)*(x_c(i) - loc_c);
-#    }
-#    return val;
-#  }', depends = "RcppArmadillo")
-#res_c <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, loc = loc_shift)
-#res_c$par
-#res_c$val
-### Use getPSOInfo() to change the PSO options
-#alg_setting <- getPSOInfo(nSwarm = 32, maxIter = 100, psoType = "quantum")
-#res_c_large <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
-#                       PSO_INFO = alg_setting, loc = loc_shift)
-#res_c_large$history
+
+# C++ function example
+\donttest{
+library(Rcpp)
+library(RcppArmadillo)
+objf_c <- cppFunction('double objf_c(SEXP x, SEXP loc) {
+    double val = 0;
+    double loc_c = (double)Rcpp::as<double>(loc);
+    arma::rowvec x_c = (arma::rowvec)Rcpp::as<arma::rowvec>(x);
+    for (arma::uword i = 0; i < x_c.n_elem; i++) {
+      val += (x_c(i) - loc_c)*(x_c(i) - loc_c);
+    }
+    return val;
+  }', depends = "RcppArmadillo")
+  
+alg_setting <- getPSOInfo(nSwarm = 32, maxIter = 100, psoType = "quantum")
+res_c <- globpso(objFunc = objf_c, lower = low_bound, upper = upp_bound, 
+                 PSO_INFO = alg_setting, loc = 1)
+res_c$par
+res_c$val
+}
 }
 \references{
 \enumerate{

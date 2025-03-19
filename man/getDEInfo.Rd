@@ -50,6 +50,5 @@ A list of DE parameter settings.
 Create a list with DE parameters for Minimization.
 }
 \examples{
-# Get default settings with specified population size and maximal number of iterations.
 DE_INFO <- getDEInfo(nPop = 32, maxIter = 100)
 }
