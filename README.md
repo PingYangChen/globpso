@@ -24,8 +24,13 @@ and six types of DE (Storn, R. and Price, K., 1997):
 
 Installation
 ------------
-Please install the latest development version from github with
+Install the stable version of `globpso` on CRAN via
 
+``` r
+install.packages("globpso")
+```
+
+(Not recommended) Or, install the latest under-development version from github with
 ``` r
 install.packages("devtools")
 devtools::install_github("PingYangChen/globpso")
